@@ -1,5 +1,5 @@
 # LibraryPAO
-Progetto Libreria per Esame PAO 2025
+Progetto Biblioteca per Esame PAO 2025
 
 ## Idee per Polimorfismo Non Banale
 
@@ -43,15 +43,16 @@ Ogni tipo di media crea un widget Qt personalizzato con layout e controlli speci
 #### Attributi
 - titolo
 - anno
+- genere
 - id
+- disponibile
+- nprestiti
+- proxDisp
 #### Metodi
 - mostraDettagli
 - toJson
 - fromJson
-- getSearchableString
-- getTitle
-- getYear
-- getId
+- calcolaPrestito
 ----
 
 ### Libro
@@ -60,9 +61,9 @@ Ogni tipo di media crea un widget Qt personalizzato con layout e controlli speci
 - editore 
 - pagine
 - isbn
-- genere
 #### Metodi
 - mostraDettagli
+- calcolaPrestito
 ----
 
 ### Film
@@ -70,9 +71,9 @@ Ogni tipo di media crea un widget Qt personalizzato con layout e controlli speci
 - regista
 - durata
 - cast
-- genere
 #### Metodi
 - mostraDettagli
+- calcolaPrestito
 ----
 
 ### Articolo
@@ -83,3 +84,4 @@ Ogni tipo di media crea un widget Qt personalizzato con layout e controlli speci
 - pagine
 #### Metodi
 - mostraDettagli
+- calcolaPrestito

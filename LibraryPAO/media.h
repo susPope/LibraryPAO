@@ -5,30 +5,41 @@
 #include <QDate>
 
 class Media {
+private:
+    QString titolo;
+    QString genere;
+    int anno;
+    QString id;         // Identificatore unico
+    bool disponibile;   //default = true
+    int nprestiti;
+    QDate proxDisp;     // Data dalla quale sarà possibile prender in prestito nuovamente
+
 public:
-    // Costruttori / Distruttori (TODO: verificare se servono)
-    Media();
-    virtual ~Media();
+    // Costruttori / Distruttori
+    Media(const QString &titolo, QString genere, int anno, bool disponibile,
+          int nprestiti);
+    virtual ~Media() = default; // Distruttore puro -> classe astratta
 
     // Metodi polimorfi (non banali)
     virtual QString mostraDettagli() const = 0;
     virtual QDate calcolaPrestito(int days) const = 0;
-    // Metodo polimorfo #2: Creazione widget UI
+    // Metodo polimorfo #3: Creazione widget UI
     //virtual QWidget* createDetailsWidget(QWidget* parent = nullptr) const = 0;
 
-    // Getters per attributi comuni
-    QString getTitolo() const { return titolo; }
-    int getAnno() const { return anno; }
-    QString getId() const { return id; }
-    bool isDisponibile() const { return disponibile; }
-    QDate getProssimaDisponibilita() const { return proxDisp; }
+    // GETTER
+    QString getTitolo() const;
+    QString getGenere() const;
+    int getAnno() const;
+    QString getId() const;
+    bool getDisponibilita() const;
+    int getNprestiti() const;
+    QDate getProssimaDisponibilita() const;
 
-protected:
-    QString titolo;
-    int anno;
-    QString id;     // Identificatore unico
-    bool disponibile;
-    QDate proxDisp; // Data dalla quale sarà possibile prender in prestito nuovamente
+    // SETTER
+    void setTitolo(const QString& nuovotitolo);
+    void setGenere(const QString& nuovogenere);
+    void setAnno(const int& nuovoanno);
+    //QDate setProssimaDisponibilita(const QDate& nuovaproxdisponibilita);
 };
 
 #endif // MEDIA_H

@@ -1,0 +1,155 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:137.0) Gecko/20100101 Firefox/137.0" version="26.2.14">
+  <diagram name="Page-1" id="kZ3YIznppi8R4ySuK8TS">
+    <mxGraphModel dx="786" dy="1114" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="&lt;&lt;abstract&gt;&gt;&#xa;Media" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=41.84615384615385;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#b0e3e6;strokeColor=#0e8088;" parent="1" vertex="1">
+          <mxGeometry x="204" y="227" width="392" height="357.8461538461538" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="- titolo: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=Helvetica;fontSize=12;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="41.84615384615385" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="I1prj6-LmJ7tEnWWjiUh-73" value="- genere: QString" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="2">
+          <mxGeometry y="69.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="- anno: int" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="97.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="- id: QString" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="2" vertex="1">
+          <mxGeometry y="125.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="- disponibile: bool" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="2" vertex="1">
+          <mxGeometry y="153.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="I1prj6-LmJ7tEnWWjiUh-75" value="- nprestiti: int" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" vertex="1" parent="2">
+          <mxGeometry y="181.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="I1prj6-LmJ7tEnWWjiUh-74" value="- proxDIsp: QDate" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="2">
+          <mxGeometry y="209.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="7" style="line;strokeWidth=1;fillColor=#f5f5f5;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="237.84615384615384" width="392" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="+ Media(titolo, genere, anno, disponibile, nprestiti)" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="245.84615384615384" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="+ virtual ~Media()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="273.8461538461538" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="+ virtual mostraDettagli() : : QString = 0" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="301.8461538461538" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="+ virtual calcolaPrestito(int) : : InfoPrestito = 0" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="2" vertex="1">
+          <mxGeometry y="329.8461538461538" width="392" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="Libro" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28.571428571428573;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="45" y="662" width="205" height="268.57142857142856" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="- autore: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="28.571428571428573" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="- editore: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="57.57142857142857" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="- pagine: int" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="86.57142857142857" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="- isbn: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="115.57142857142857" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="28" style="line;strokeWidth=1;fillColor=#f5f5f5;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="144.57142857142856" width="205" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="+ Libro(titolo, anno, ...)" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="152.57142857142856" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="+ ~Libro()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="181.57142857142856" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="I1prj6-LmJ7tEnWWjiUh-76" value="+ mostraDettagli()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" vertex="1" parent="22">
+          <mxGeometry y="210.57142857142856" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="+ calcolaPrestito()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="22" vertex="1">
+          <mxGeometry y="239.57142857142856" width="205" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="Film" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28.923076923076923;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d0cee2;strokeColor=#56517e;" parent="1" vertex="1">
+          <mxGeometry x="300" y="674" width="200" height="239.9230769230769" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="- regista: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="28.923076923076923" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="- durata: int" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="57.92307692307692" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="40" value="- cast: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="86.92307692307692" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="42" style="line;strokeWidth=1;fillColor=#f5f5f5;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="115.92307692307692" width="200" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="44" value="+ Film(titolo, anno, ...)" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="123.92307692307692" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="45" value="+ ~Film()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="152.9230769230769" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="I1prj6-LmJ7tEnWWjiUh-78" value="+ mostraDettagli()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" vertex="1" parent="37">
+          <mxGeometry y="181.9230769230769" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="46" value="+ calcolaPrestito()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="37" vertex="1">
+          <mxGeometry y="210.9230769230769" width="200" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="51" value="Articolo" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28.571428571428573;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
+          <mxGeometry x="550" y="662" width="233" height="268.57142857142856" as="geometry" />
+        </mxCell>
+        <mxCell id="52" value="- autore: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="28.571428571428573" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="53" value="- rivista: QString" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="57.57142857142857" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="54" value="- volume: int" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="86.57142857142857" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="55" value="- pagine: int" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="115.57142857142857" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="57" style="line;strokeWidth=1;fillColor=#f5f5f5;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#666666;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="144.57142857142856" width="233" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="59" value="+ Articolo(titolo, anno, ...)" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="152.57142857142856" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="60" value="+ ~Articolo()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="181.57142857142856" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="I1prj6-LmJ7tEnWWjiUh-79" value="+ mostraDettagli()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" vertex="1" parent="51">
+          <mxGeometry y="210.57142857142856" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="61" value="+ calcolaPrestito()" style="text;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#333333;" parent="51" vertex="1">
+          <mxGeometry y="239.57142857142856" width="233" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="66" value="" style="curved=1;startArrow=block;startSize=16;startFill=0;endArrow=none;exitX=0;exitY=0.92;entryX=0.5;entryY=0;" parent="1" source="2" target="22" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="147" y="637" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="67" value="" style="curved=1;startArrow=block;startSize=16;startFill=0;endArrow=none;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" source="2" target="37" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="68" value="" style="curved=1;startArrow=block;startSize=16;startFill=0;endArrow=none;exitX=1;exitY=0.9;entryX=0.5;entryY=0;" parent="1" source="2" target="51" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="666" y="637" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
