@@ -13,20 +13,19 @@ private:
 public:
     //Film(const QString& regista, int durata, const QStringList& cast);
     Articolo(const QString& titolo, const QString& genere, int anno,
-         const QString& autore, const QString& rivista, int volume, int pagine,
-         bool disponibile = true, int nprestiti = 0,
-         const QDate& proxDisp = QDate());
-    virtual ~Articolo() = default;
+             const QString& autore, const QString& rivista, int volume, int pagine);
+    ~Articolo() override;
 
     // Implementazione metodi polimorfi
+    QString generaId() const override;
     //QString mostraDettagli() const override;
     //QDate calcolaPrestito(int days) const override;
 
     // GETTER
-    QString getAutore() const;
-    QString getRivista() const;
-    int getVolume() const;
-    int getPagine() const;
+    QString getAutore() const { return autore; }
+    QString getRivista() const { return rivista; }
+    int getVolume() const { return volume; }
+    int getPagine() const { return pagine; }
 
     // SETTER
     void setAutore(const QString& nuovoautore);

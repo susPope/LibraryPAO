@@ -16,24 +16,31 @@ private:
 
 public:
     // Costruttori / Distruttori
-    Media(const QString &titolo, QString genere, int anno, bool disponibile,
-          int nprestiti);
+    Media(const QString &titolo, const QString &genere, int anno,
+          bool disponibile = true, int nprestiti = 0);
     virtual ~Media() = default; // Distruttore puro -> classe astratta
+
+    /* Metodi:
+        - prenota
+        - restituisci
+        - ???
+    */
 
     // Metodi polimorfi (non banali)
     virtual QString mostraDettagli() const = 0;
     virtual QDate calcolaPrestito(int days) const = 0;
+    virtual QString generaId() const = 0;
     // Metodo polimorfo #3: Creazione widget UI
     //virtual QWidget* createDetailsWidget(QWidget* parent = nullptr) const = 0;
 
     // GETTER
-    QString getTitolo() const;
-    QString getGenere() const;
-    int getAnno() const;
-    QString getId() const;
-    bool getDisponibilita() const;
-    int getNprestiti() const;
-    QDate getProssimaDisponibilita() const;
+    QString getTitolo() const { return titolo; }
+    QString getGenere() const { return genere; }
+    int getAnno() const { return anno; }
+    QString getId() const {return id; }
+    bool getDisponibilita() const { return disponibile; }
+    int getNprestiti() const { return  nprestiti; }
+    QDate getProssimaDisponibilita() const { return proxDisp; }
 
     // SETTER
     void setTitolo(const QString& nuovotitolo);

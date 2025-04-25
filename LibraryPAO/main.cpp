@@ -1,11 +1,15 @@
 #include "mainwindow.h"
-
 #include <QApplication>
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    // Imposta stile globale
+    app.setStyle("Fusion");
+
+    // Crea e mostra finestra principale
+    MainWindow mainWindow;
+    mainWindow.show();
+
+    return app.exec();
 }

@@ -14,20 +14,19 @@ public:
     // Costruttori / Distruttori
     Libro(const QString& titolo, const QString& genere, int anno,
           const QString& autore, const QString& editore,
-          int pagine, const QString& isbn,
-          bool disponibile = true, int nprestiti = 0,
-          const QDate& proxDisp = QDate());
+          int pagine, const QString& isbn);
     ~Libro() override;  // Distruttore esplicito
 
     // Implementazione metodi polimorfi
+    QString generaId() const override;
     //QString mostraDettagli() const override;
     //QDate calcolaPrestito(int days) const override;
 
     // GETTER
-    QString getAutore() const;
-    QString getEditore() const;
-    int getPagine() const;
-    QString getIsbn() const;
+    QString getAutore() const { return autore; }
+    QString getEditore() const { return editore; }
+    int getPagine() const { return pagine; }
+    QString getIsbn() const { return isbn; }
 
     // SETTER
     void setAutore(const QString& nuovoautore);
