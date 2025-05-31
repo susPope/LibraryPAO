@@ -19,8 +19,20 @@ Articolo::~Articolo(){
 }
 
 // Implementazione metodo polimorfo per generare ID
-    QString Articolo::generaId() const {
+QString Articolo::generaId() const {
         return QString("ART-%1-%2").arg(rivista.left(3).toUpper(), (volume+getAnno()));
+}
+
+// Implementazione metodi polimorfi
+QString Articolo::mostraDettagli() const {
+    return QString("%1\nAutore: %2\nRivista: %3 min\nVolume: %4\nPagine: %5")
+        .arg(getTitolo(), autore, rivista).arg(volume).arg(pagine);
+}
+
+QDate Articolo::calcolaPrestito(int days) const {
+    // Film hanno prestito più breve (es. 7 giorni)
+    //TODO: decidere prestito
+    return QDate::currentDate().addDays(days > 7 ? 7 : days);
 }
 
 // SETTER implementations

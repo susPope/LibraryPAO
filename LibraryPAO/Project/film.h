@@ -18,8 +18,8 @@ public:
 
     // Implementazione metodi polimorfi
     QString generaId() const override;
-    //QString mostraDettagli() const override;
-    //QDate calcolaPrestito(int days) const override;
+    QString mostraDettagli() const override;
+    QDate calcolaPrestito(int days) const override;
 
     // GETTER
     QString getRegista() const { return regista; }

@@ -1,6 +1,7 @@
 #ifndef MANAGEMEDIAWIDGET_H
 #define MANAGEMEDIAWIDGET_H
 
+#include "mediaformwidget.h"
 #include <QWidget>
 
 class QListWidget;
@@ -23,6 +24,7 @@ private:
     QPushButton *addButton;
     QPushButton *editButton;
     QPushButton *deleteButton;
+    MediaFormWidget* mediaForm;
 };
 
 #endif // MANAGEMEDIAWIDGET_H

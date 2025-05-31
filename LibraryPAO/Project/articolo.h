@@ -7,7 +7,7 @@ class Articolo : public Media {
 private:
     QString autore;
     QString rivista;
-    int volume;         // in minuti
+    int volume;
     int pagine;
 
 public:
@@ -18,8 +18,8 @@ public:
 
     // Implementazione metodi polimorfi
     QString generaId() const override;
-    //QString mostraDettagli() const override;
-    //QDate calcolaPrestito(int days) const override;
+    QString mostraDettagli() const override;
+    QDate calcolaPrestito(int days) const override;
 
     // GETTER
     QString getAutore() const { return autore; }

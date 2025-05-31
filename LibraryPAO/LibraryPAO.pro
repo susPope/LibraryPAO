@@ -11,6 +11,7 @@ CONFIG += c++17
 # Sources - usa solo percorsi corretti e rimuovi duplicati
 SOURCES += \
     GUI/loanmanagerwidget.cpp \
+    GUI/mediaformwidget.cpp \
     GUI/mediamanagerwidget.cpp \
     Project/mediarepo.cpp \
     main.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 HEADERS += \
     GUI/loanmanagerwidget.h \
     GUI/mainwindow.h \
+    GUI/mediaformwidget.h \
     GUI/mediamanagerwidget.h \
     GUI/searchwidget.h \
     Project/articolo.h \

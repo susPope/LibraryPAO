@@ -23,16 +23,16 @@ QString Libro::generaId() const {
     return QString("LIB-%1-%2").arg(editore.left(3).toUpper(), isbn);
 }
 
-/* Implementazione altri metodi polimorfi
+// Implementazione altri metodi polimorfi
 QString Libro::mostraDettagli() const {
     return QString("%1\nAutore: %2\nEditore: %3\nPagine: %4\nISBN: %5")
-        .arg(titolo, autore, editore).arg(pagine).arg(isbn);
+        .arg(getTitolo(), autore, editore).arg(pagine).arg(isbn);
 }
 
 QDate Libro::calcolaPrestito(int days) const {
     return QDate::currentDate().addDays(days);
 }
-*/
+
 
 // SETTER implementations
 void Libro::setAutore(const QString& nuovoautore) {

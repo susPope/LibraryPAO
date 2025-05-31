@@ -1,4 +1,6 @@
+#include "Project/media.h"
 #include "mediamanagerwidget.h"
+#include "Project/mediarepo.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>
@@ -7,6 +9,8 @@
 
 MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     mediaList = new QListWidget(this);
+
+    mediaForm = new MediaFormWidget(this);
 
     addButton = new QPushButton("Aggiungi", this);
     editButton = new QPushButton("Modifica", this);
@@ -19,6 +23,7 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(mediaList);
+    mainLayout->addWidget(mediaForm);
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
@@ -31,14 +36,11 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
 }
 
 void MediaManagerWidget::addMedia() {
-    // In versione reale apriresti una dialog per inserire i dettagli
-    QString nuovoMedia = "Nuovo Media"; // placeholder
-    mediaList->addItem(nuovoMedia);
-
-    //TODO: creazione oggetto media
-    //TODO: selezione tipo di oggetto
-    //TODO: mostrare attributi da compilare in base al tipo
-    //TODO: aggiungere oggetto al database
+    Media* nuovo = mediaForm->creaMedia();
+    if (nuovo) {
+        mediaList->addItem(nuovo->getTitolo()); // o come hai chiamato il getter del titolo
+        MediaRepo::instance().aggiungiMedia(nuovo);  // se usi la repo singleton
+    }
 
 }
 

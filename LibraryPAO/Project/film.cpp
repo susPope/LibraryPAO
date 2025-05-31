@@ -22,10 +22,10 @@ QString Film::generaId() const {
     return QString("FIL-%1-%2").arg(regista.left(3).toUpper(), getAnno());
 }
 
-/* Implementazione metodi polimorfi
+// Implementazione metodi polimorfi
 QString Film::mostraDettagli() const {
     QString dettagli = QString("%1\nRegista: %2\nDurata: %3 min\nCast: %4")
-                        .arg(titolo, regista)
+                           .arg(getTitolo(), regista)
                         .arg(durata)
                         .arg(cast.join(", "));
     return dettagli;
@@ -35,7 +35,7 @@ QDate Film::calcolaPrestito(int days) const {
     // Film hanno prestito più breve (es. 7 giorni)
     return QDate::currentDate().addDays(days > 7 ? 7 : days);
 }
-*/
+
 
 // SETTER implementations
 void Film::setRegista(const QString& nuovoregista) {
