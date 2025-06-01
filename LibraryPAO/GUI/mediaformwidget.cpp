@@ -1,18 +1,29 @@
 #include "mediaformwidget.h"
 #include <QFormLayout>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "Project/libro.h"
 #include "Project/film.h"
 #include "Project/articolo.h"
 
 MediaFormWidget::MediaFormWidget(QWidget *parent) : QWidget(parent) {
-    tipoBox = new QComboBox(this);
-    tipoBox->addItem("Libro");
-    tipoBox->addItem("Film");
-    tipoBox->addItem("Articolo");
+    // Radio button
+    radioLibro = new QRadioButton("Libro", this);
+    radioFilm = new QRadioButton("Film", this);
+    radioArticolo = new QRadioButton("Articolo", this);
 
+    radioLibro->setChecked(true); // default
 
+    tipoGroup = new QButtonGroup(this);
+    tipoGroup->addButton(radioLibro, 0);
+    tipoGroup->addButton(radioFilm, 1);
+    tipoGroup->addButton(radioArticolo, 2);
+
+    QHBoxLayout* tipoLayout = new QHBoxLayout;
+    tipoLayout->addWidget(radioLibro);
+    tipoLayout->addWidget(radioFilm);
+    tipoLayout->addWidget(radioArticolo);
 
     // Stack con form specifici
     stack = new QStackedWidget(this);
@@ -20,13 +31,15 @@ MediaFormWidget::MediaFormWidget(QWidget *parent) : QWidget(parent) {
     stack->addWidget(creaFormFilm());     // index 1
     stack->addWidget(creaFormArticolo()); // index 2
 
+    // Main Layout
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(tipoBox);
     mainLayout->addWidget(creaFormMedia());
+    mainLayout->addLayout(tipoLayout);
     mainLayout->addWidget(stack);
     setLayout(mainLayout);
 
-    connect(tipoBox, QOverload<int>::of(&QComboBox::currentIndexChanged), stack, &QStackedWidget::setCurrentIndex);
+    // Connect
+    connect(tipoGroup, &QButtonGroup::idClicked, stack, &QStackedWidget::setCurrentIndex);
 }
 
 QWidget* MediaFormWidget::creaFormMedia() {
@@ -47,12 +60,12 @@ QWidget* MediaFormWidget::creaFormLibro() {
     QWidget *widget = new QWidget;
     QFormLayout *layout = new QFormLayout(widget);
     autoreLib = new QLineEdit;
-    genere = new QLineEdit;
+    editore = new QLineEdit;
     pagineLib = new QSpinBox;
     pagineLib->setRange(0, 99999);
     isbn = new QLineEdit;
     layout->addRow("Autore:", autoreLib);
-    layout->addRow("Genere:", genere);
+    layout->addRow("Editore:", editore);
     layout->addRow("Pagine:", pagineLib);
     layout->addRow("ISBN:", isbn);
     return widget;
@@ -87,22 +100,25 @@ QWidget* MediaFormWidget::creaFormArticolo() {
     return widget;
 }
 
-Media* MediaFormWidget::creaMedia() const {
+std::unique_ptr<Media> MediaFormWidget::creaMedia() const {
     QStringList list;
 
-    switch (tipoBox->currentIndex()) {
+    switch (tipoGroup->checkedId()) {
     case 0:
-        return new Libro(titolo->text(), genere->text(), anno->value(),
+        return std::make_unique<Libro>(
+            titolo->text(), genere->text(), anno->value(),
             autoreLib->text(), editore->text(), pagineLib->value(), isbn->text());
     case 1:
         list = cast->text().split(",", Qt::SkipEmptyParts);
         for (QString &item : list) {
-            item = item.trimmed();      // Rimuove spazi iniziali e finali da ogni elemento
+            item = item.trimmed();
         }
-        return new Film(titolo->text(), genere->text(), anno->value(),
+        return std::make_unique<Film>(
+            titolo->text(), genere->text(), anno->value(),
             regista->text(), durata->value(), list);
     case 2:
-        return new Articolo(titolo->text(), genere->text(), anno->value(),
+        return std::make_unique<Articolo>(
+            titolo->text(), genere->text(), anno->value(),
             autoreArt->text(), rivista->text(), volume->value(), pagineArt->value());
     default:
         return nullptr;

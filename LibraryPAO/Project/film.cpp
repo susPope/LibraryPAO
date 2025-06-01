@@ -1,5 +1,6 @@
 #include "film.h"
 #include <QDebug>
+#include <QJsonArray>
 
 // Costruttore
 Film::Film(const QString& titolo, const QString& genere, int anno,
@@ -34,6 +35,32 @@ QString Film::mostraDettagli() const {
 QDate Film::calcolaPrestito(int days) const {
     // Film hanno prestito più breve (es. 7 giorni)
     return QDate::currentDate().addDays(days > 7 ? 7 : days);
+}
+
+QJsonObject Film::toJson() const {
+    QJsonObject obj;
+
+    // Attributi comuni
+    obj["tipo"] = "Libro";  // utile per distinguere i media
+    obj["titolo"] = getTitolo();
+    obj["genere"] = getGenere();
+    obj["anno"] = getAnno();
+    obj["id"] = getId();
+    obj["disponibile"] = getDisponibilita();
+    obj["nprestiti"] = getNprestiti();
+    obj["proxDisp"] = getProssimaDisponibilita().toString(Qt::ISODate);
+
+    // Attributi specifici di Libro
+    obj["regista"] = regista;
+    obj["durata"] = durata;
+
+    QJsonArray castArray;
+    for (const QString &attore : cast) {
+        castArray.append(attore);
+    }
+    obj["cast"] = castArray;
+
+    return obj;
 }
 
 

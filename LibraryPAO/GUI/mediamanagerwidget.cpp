@@ -36,12 +36,19 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
 }
 
 void MediaManagerWidget::addMedia() {
-    Media* nuovo = mediaForm->creaMedia();
-    if (nuovo) {
-        mediaList->addItem(nuovo->getTitolo()); // o come hai chiamato il getter del titolo
-        MediaRepo::instance().aggiungiMedia(nuovo);  // se usi la repo singleton
-    }
+    std::unique_ptr<Media> nuovo = mediaForm->creaMedia(); // ipotetico metodo che ritorna unique_ptr
 
+    if (nuovo) {
+        // Salviamo raw pointer per metterlo nella QListWidgetItem
+        Media* rawPtr = nuovo.get();
+
+        // Spostiamo la unique_ptr dentro la repo
+        MediaRepo::instance().aggiungiMedia(std::move(nuovo));
+
+        QListWidgetItem* item = new QListWidgetItem(rawPtr->getTitolo());
+        item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(rawPtr)));
+        mediaList->addItem(item);
+    }
 }
 
 void MediaManagerWidget::editSelectedMedia() {
@@ -54,10 +61,21 @@ void MediaManagerWidget::editSelectedMedia() {
 }
 
 void MediaManagerWidget::deleteSelectedMedia() {
-    QListWidgetItem *item = mediaList->takeItem(mediaList->currentRow());
+    int row = mediaList->currentRow();
+    QListWidgetItem *item = mediaList->takeItem(row);
     if (item) {
+        Media* media = getMediaFromItem(item);
+        if (media) {
+            MediaRepo::instance().rimuoviMedia(media);
+        }
         delete item;
     } else {
         QMessageBox::warning(this, "Elimina", "Seleziona un media da eliminare.");
     }
+}
+
+Media* MediaManagerWidget::getMediaFromItem(QListWidgetItem* item) {
+    if (!item) return nullptr;
+    quintptr ptrVal = item->data(Qt::UserRole).value<quintptr>();
+    return reinterpret_cast<Media*>(ptrVal);
 }

@@ -1,5 +1,7 @@
 #include "articolo.h"
 #include <QDebug>
+#include <QJsonValue>
+#include <QDate>
 
 // Costruttore
 Articolo::Articolo(const QString& titolo, const QString& genere, int anno,
@@ -33,6 +35,27 @@ QDate Articolo::calcolaPrestito(int days) const {
     // Film hanno prestito più breve (es. 7 giorni)
     //TODO: decidere prestito
     return QDate::currentDate().addDays(days > 7 ? 7 : days);
+}
+
+QJsonObject Articolo::toJson() const {
+    QJsonObject obj;
+
+    // Attributi comuni (ipotizzando che esistano i getter)
+    obj["titolo"] = getTitolo();
+    obj["genere"] = getGenere();
+    obj["anno"] = getAnno();
+    obj["id"] = getId();
+    obj["disponibile"] = getDisponibilita();
+    obj["nprestiti"] = getNprestiti();
+    obj["proxDisp"] = getProssimaDisponibilita().toString(Qt::ISODate);
+
+    // Attributi specifici di Articolo
+    obj["autore"] = autore;
+    obj["rivista"] = rivista;
+    obj["volume"] = volume;
+    obj["pagine"] = pagine;
+
+    return obj;
 }
 
 // SETTER implementations

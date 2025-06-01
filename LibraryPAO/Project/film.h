@@ -3,6 +3,7 @@
 
 #include "media.h"
 #include <QStringList>
+#include <QJsonObject>
 
 class Film : public Media {
 private:
@@ -20,6 +21,7 @@ public:
     QString generaId() const override;
     QString mostraDettagli() const override;
     QDate calcolaPrestito(int days) const override;
+    QJsonObject toJson() const override;
 
     // GETTER
     QString getRegista() const { return regista; }

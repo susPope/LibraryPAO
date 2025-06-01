@@ -1,5 +1,0 @@
-<RCC>
-    <qresource lang="json" prefix="/database">
-        <file>Database/libraryDB.json</file>
-    </qresource>
-</RCC>

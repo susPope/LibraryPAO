@@ -3,6 +3,7 @@
 
 #include "mediaformwidget.h"
 #include <QWidget>
+#include <QListWidgetItem>
 
 class QListWidget;
 class QPushButton;
@@ -25,6 +26,8 @@ private:
     QPushButton *editButton;
     QPushButton *deleteButton;
     MediaFormWidget* mediaForm;
+
+    Media* getMediaFromItem(QListWidgetItem* item);
 };
 
 #endif // MANAGEMEDIAWIDGET_H

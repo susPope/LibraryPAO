@@ -30,6 +30,7 @@ public:
     virtual QString mostraDettagli() const = 0;
     virtual QDate calcolaPrestito(int days) const = 0;
     virtual QString generaId() const = 0;
+    virtual QJsonObject toJson() const = 0;
     // Metodo polimorfo #3: Creazione widget UI
     //virtual QWidget* createDetailsWidget(QWidget* parent = nullptr) const = 0;
 

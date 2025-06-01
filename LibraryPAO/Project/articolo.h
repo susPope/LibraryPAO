@@ -2,6 +2,7 @@
 #define ARTICOLO_H
 
 #include "media.h"
+#include <QJsonObject>
 
 class Articolo : public Media {
 private:
@@ -20,6 +21,7 @@ public:
     QString generaId() const override;
     QString mostraDettagli() const override;
     QDate calcolaPrestito(int days) const override;
+    QJsonObject toJson() const override;
 
     // GETTER
     QString getAutore() const { return autore; }

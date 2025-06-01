@@ -2,12 +2,14 @@
 #define MEDIAFORMWIDGET_H
 
 #include <QWidget>
-#include <QComboBox>
+#include <QRadioButton>
 #include <QStackedWidget>
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QDate>
 #include <QSpinBox>
+#include <QButtonGroup>
+#include <memory>
 
 #include "Project/media.h"
 
@@ -16,16 +18,20 @@ class MediaFormWidget : public QWidget {
 
 public:
     explicit MediaFormWidget(QWidget *parent = nullptr);
-    Media* creaMedia() const;
+    std::unique_ptr<Media> creaMedia() const;
 
 private slots:
-    void cambiaTipo(int index);
+    void cambiaTipo(int index); // TODO: Valutare se eliminare questo metodo
 
 private:
     // Selettore tipo media
-    QComboBox *tipoBox;
+    QRadioButton* radioLibro;
+    QRadioButton* radioFilm;
+    QRadioButton* radioArticolo;
+    QButtonGroup* tipoGroup;
     QStackedWidget *stack;
 
+    // Campi media
     QLineEdit *titolo;
     QLineEdit *genere;
     QSpinBox *anno;
@@ -47,7 +53,7 @@ private:
     QSpinBox *volume;
     QSpinBox *pagineArt;
 
-    // Metodi per creare le form
+    // Metodi per creare i form
     QWidget* creaFormMedia();
     QWidget* creaFormLibro();
     QWidget* creaFormFilm();

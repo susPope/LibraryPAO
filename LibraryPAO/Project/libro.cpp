@@ -33,6 +33,28 @@ QDate Libro::calcolaPrestito(int days) const {
     return QDate::currentDate().addDays(days);
 }
 
+QJsonObject Libro::toJson() const {
+    QJsonObject obj;
+
+    // Attributi comuni
+    obj["tipo"] = "Libro";  // utile per distinguere i media
+    obj["titolo"] = getTitolo();
+    obj["genere"] = getGenere();
+    obj["anno"] = getAnno();
+    obj["id"] = getId();
+    obj["disponibile"] = getDisponibilita();
+    obj["nprestiti"] = getNprestiti();
+    obj["proxDisp"] = getProssimaDisponibilita().toString(Qt::ISODate);
+
+    // Attributi specifici di Libro
+    obj["autore"] = autore;
+    obj["editore"] = editore;
+    obj["pagine"] = pagine;
+    obj["isbn"] = isbn;
+
+    return obj;
+}
+
 
 // SETTER implementations
 void Libro::setAutore(const QString& nuovoautore) {
