@@ -13,14 +13,19 @@ Film::Film(const QString& titolo, const QString& genere, int anno,
     qDebug() << "Creato film:" << titolo << "Regista:" << regista;
 }
 
+Film::Film() : Media(), regista(""), durata(0), cast() {}
+
 // Distruttore (implementazione anche se 'default')
 Film::~Film(){
     qDebug() << "Distrutto libro:" << getTitolo();
 }
 
 // Implementazione metodo polimorfo per generare ID
-QString Film::generaId() const {
-    return QString("FIL-%1-%2").arg(regista.left(3).toUpper(), getAnno());
+QString Film::generaId(int count) const {
+    QString cleanRegista = regista.simplified().remove(' ').toUpper();
+    QString cleanTitolo = getTitolo().simplified().remove(' ').toUpper();
+
+    return QString("FIL-%1-%2-%3").arg(cleanTitolo, cleanRegista, QString::number(count));
 }
 
 // Implementazione metodi polimorfi
@@ -50,17 +55,43 @@ QJsonObject Film::toJson() const {
     obj["nprestiti"] = getNprestiti();
     obj["proxDisp"] = getProssimaDisponibilita().toString(Qt::ISODate);
 
-    // Attributi specifici di Libro
+    // Attributi specifici di Film
     obj["regista"] = regista;
     obj["durata"] = durata;
 
     QJsonArray castArray;
-    for (const QString &attore : cast) {
+    for (const QString& attore : cast) {
         castArray.append(attore);
     }
     obj["cast"] = castArray;
 
     return obj;
+}
+
+Film Film::fromJson(const QJsonObject& obj) {
+    // Costruzione base (può anche essere un Articolo() vuoto se serve)
+    Film f;
+    f.setTitolo(obj["titolo"].toString());
+    f.setGenere(obj["genere"].toString());
+    f.setAnno(obj["anno"].toInt());
+    f.setId(obj["id"].toString());
+    f.setDisponibilita(obj["disponibile"].toBool());
+    f.setNprestiti(obj["nprestiti"].toInt());
+    f.setProssimaDisponibilita(QDate::fromString(obj["proxDisp"].toString(), Qt::ISODate));
+
+    // Attributi specifici di Film
+    f.setRegista(obj["regista"].toString());
+    f.setDurata(obj["durata"].toInt());
+
+    QJsonArray castArray = obj["cast"].toArray();
+    QStringList castList;
+    for (const QJsonValue &val : std::as_const(castArray)) { // Per eliminare il warning: range-based ‘for’ loops with reference variables bind to temporary objects
+        castList.append(val.toString());
+    }
+
+    f.setCast(castList);
+
+    return f;
 }
 
 

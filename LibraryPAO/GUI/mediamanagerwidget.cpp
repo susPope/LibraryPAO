@@ -1,5 +1,9 @@
 #include "Project/media.h"
+#include "Project/libro.h"
+#include "Project/film.h"
+#include "Project/articolo.h"
 #include "mediamanagerwidget.h"
+#include "MediaManager/mediaviewwidget.h"
 #include "Project/mediarepo.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -15,48 +19,116 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     addButton = new QPushButton("Aggiungi", this);
     editButton = new QPushButton("Modifica", this);
     deleteButton = new QPushButton("Elimina", this);
+    deleteDBButton = new QPushButton("Elimina DataBase", this);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(addButton);
     buttonLayout->addWidget(editButton);
     buttonLayout->addWidget(deleteButton);
+    buttonLayout->addWidget(deleteDBButton);
+
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(mediaList);
+    centralLayout->addWidget(mediaForm);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(mediaList);
-    mainLayout->addWidget(mediaForm);
+    //mainLayout->addWidget(mediaList);
+    //mainLayout->addWidget(mediaForm);
+    mainLayout->addLayout(centralLayout);
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
     setWindowTitle("Gestione Media");
 
+    const auto& tuttiIMedia = MediaRepo::instance().getTuttiIMedia();
+    for (const auto& ptr : tuttiIMedia) {
+        Media* m = ptr.get();
+        //QListWidgetItem* item = new QListWidgetItem(m->getTitolo());
+        //item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
+        //mediaList->addItem(item);
+
+        QListWidgetItem* item = new QListWidgetItem();
+        MediaViewWidget* widget = new MediaViewWidget(m);
+        item->setSizeHint(widget->sizeHint());
+        mediaList->addItem(item);
+        mediaList->setItemWidget(item, widget);
+        item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
+    }
+
     // Connessioni
     connect(addButton, SIGNAL(clicked()), this, SLOT(addMedia()));
     connect(editButton, SIGNAL(clicked()), this, SLOT(editSelectedMedia()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteSelectedMedia()));
+    connect(deleteDBButton, SIGNAL(clicked()), this, SLOT(deleteAllMedia()));
+    connect(mediaList, &QListWidget::itemClicked, this, &MediaManagerWidget::populateFormFromSelected);
 }
 
 void MediaManagerWidget::addMedia() {
-    std::unique_ptr<Media> nuovo = mediaForm->creaMedia(); // ipotetico metodo che ritorna unique_ptr
+    std::unique_ptr<Media> nuovo = mediaForm->creaMedia();
 
-    if (nuovo) {
-        // Salviamo raw pointer per metterlo nella QListWidgetItem
-        Media* rawPtr = nuovo.get();
+    if (!nuovo)
+        return;
 
-        // Spostiamo la unique_ptr dentro la repo
-        MediaRepo::instance().aggiungiMedia(std::move(nuovo));
+    // Genera ID univoco
+    int count = MediaRepo::instance().countMedia(nuovo.get());
+    nuovo->setId(nuovo->generaId(count));
 
-        QListWidgetItem* item = new QListWidgetItem(rawPtr->getTitolo());
-        item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(rawPtr)));
-        mediaList->addItem(item);
-    }
+    // Aggiunge alla repository
+    Media* rawPtr = nuovo.get();
+    MediaRepo::instance().aggiungiMedia(std::move(nuovo));
+
+    // Aggiorna interfaccia
+    //QListWidgetItem* item = new QListWidgetItem(rawPtr->getTitolo());
+    //item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(rawPtr)));
+    //mediaList->addItem(item);
+
+    QListWidgetItem* item = new QListWidgetItem();
+    MediaViewWidget* widget = new MediaViewWidget(rawPtr);
+
+    item->setSizeHint(widget->sizeHint());
+    mediaList->addItem(item);
+    mediaList->setItemWidget(item, widget);
+
+    // Per salvataggio rawPtr nel QListWidgetItem
+    item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(rawPtr)));
+
+
+    mediaForm->pulisciCampi();
 }
 
 void MediaManagerWidget::editSelectedMedia() {
     QListWidgetItem *item = mediaList->currentItem();
-    if (item) {
-        item->setText("Media modificato"); // in realtà apriresti una dialog di modifica
-    } else {
+    if (!item) {
         QMessageBox::warning(this, "Modifica", "Seleziona un media da modificare.");
+        return;
+    }
+
+    Media* media = getMediaFromItem(item);
+    if (!media) return;
+
+    //controllo sul radio button (TODO: spostare in mediarepo)
+    QString tipoOriginale;
+    if (dynamic_cast<Libro*>(media)) tipoOriginale = "Libro";
+    else if (dynamic_cast<Film*>(media)) tipoOriginale = "Film";
+    else if (dynamic_cast<Articolo*>(media)) tipoOriginale = "Articolo";
+
+    QString tipoForm = mediaForm->getTipoSelezionato();  // "Libro", "Film", "Articolo"
+
+    if (tipoForm != tipoOriginale) {
+        QMessageBox::warning(this, "Modifica non valida", "Non puoi cambiare il tipo del media.");
+        return;
+    }
+
+    if (mediaForm->aggiornaMedia(media)) {
+        QWidget* w = mediaList->itemWidget(item);  // ottieni il widget associato all'elemento selezionato
+        if (auto* view = dynamic_cast<MediaViewWidget*>(w)) {
+            view->aggiorna();  // chiami un metodo che rilegge i dati da 'media' e li mostra
+        }
+        //item->setText(media->getTitolo());
+        MediaRepo::instance().aggiornaMedia(media);
+        mediaForm->pulisciCampi();
+    } else {
+        QMessageBox::warning(this, "Modifica", "Errore durante l'aggiornamento del media.");
     }
 }
 
@@ -68,9 +140,28 @@ void MediaManagerWidget::deleteSelectedMedia() {
         if (media) {
             MediaRepo::instance().rimuoviMedia(media);
         }
+        QWidget* widget = mediaList->itemWidget(item);
+        if (widget) {
+            mediaList->removeItemWidget(item);
+            widget->deleteLater();  // evita memory leak
+        }
         delete item;
+        mediaForm->pulisciCampi();
     } else {
         QMessageBox::warning(this, "Elimina", "Seleziona un media da eliminare.");
+    }
+}
+
+void MediaManagerWidget::deleteAllMedia() {
+    int risposta = QMessageBox::question(this, "Conferma eliminazione",
+                                            "Sei sicuro di voler eliminare tutti i media?",
+                                            QMessageBox::Yes | QMessageBox::No);
+
+    if (risposta == QMessageBox::Yes) {
+        MediaRepo::instance().svuotaDB();
+        mediaList->clear();  // svuota la lista visuale
+        QMessageBox::information(this, "Eliminazione completata", "Tutti i media sono stati eliminati.");
+        mediaForm->pulisciCampi();
     }
 }
 
@@ -79,3 +170,11 @@ Media* MediaManagerWidget::getMediaFromItem(QListWidgetItem* item) {
     quintptr ptrVal = item->data(Qt::UserRole).value<quintptr>();
     return reinterpret_cast<Media*>(ptrVal);
 }
+
+void MediaManagerWidget::populateFormFromSelected(QListWidgetItem* item) {
+    Media* media = getMediaFromItem(item);
+    if (media) {
+        mediaForm->caricaMedia(media);  // Metodo che devi implementare in MediaFormWidget
+    }
+}
+

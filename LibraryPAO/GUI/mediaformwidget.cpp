@@ -2,10 +2,13 @@
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QListWidgetItem>
 
 #include "Project/libro.h"
 #include "Project/film.h"
 #include "Project/articolo.h"
+#include "Project/mediarepo.h"
 
 MediaFormWidget::MediaFormWidget(QWidget *parent) : QWidget(parent) {
     // Radio button
@@ -39,7 +42,7 @@ MediaFormWidget::MediaFormWidget(QWidget *parent) : QWidget(parent) {
     setLayout(mainLayout);
 
     // Connect
-    connect(tipoGroup, &QButtonGroup::idClicked, stack, &QStackedWidget::setCurrentIndex);
+    connect(tipoGroup, &QButtonGroup::idClicked, stack, &QStackedWidget::setCurrentIndex);    
 }
 
 QWidget* MediaFormWidget::creaFormMedia() {
@@ -48,11 +51,14 @@ QWidget* MediaFormWidget::creaFormMedia() {
     titolo = new QLineEdit;
     genere = new QLineEdit;
     anno = new QSpinBox;
+    id = new QLineEdit(this);
+    id->setReadOnly(true);
     anno->setRange(1700, QDate::currentDate().year()); // range anni valido
     anno->setValue(QDate::currentDate().year());
     layout->addRow("Titolo:", titolo);
     layout->addRow("Genere:", genere);
     layout->addRow("Anno:", anno);
+    layout->addRow("ID:", id);
     return widget;
 }
 
@@ -62,7 +68,7 @@ QWidget* MediaFormWidget::creaFormLibro() {
     autoreLib = new QLineEdit;
     editore = new QLineEdit;
     pagineLib = new QSpinBox;
-    pagineLib->setRange(0, 99999);
+    pagineLib->setRange(1, 99999);
     isbn = new QLineEdit;
     layout->addRow("Autore:", autoreLib);
     layout->addRow("Editore:", editore);
@@ -76,8 +82,8 @@ QWidget* MediaFormWidget::creaFormFilm() {
     QFormLayout *layout = new QFormLayout(widget);    
     regista = new QLineEdit;
     durata = new QSpinBox;
-    durata->setRange(0, 99999);
-    cast = new QLineEdit;
+    durata->setRange(1, 99999);
+    cast = new QTextEdit;
     layout->addRow("Regista:", regista);
     layout->addRow("Durata (minuti):", durata);
     layout->addRow("Cast:", cast);
@@ -90,9 +96,9 @@ QWidget* MediaFormWidget::creaFormArticolo() {
     autoreArt = new QLineEdit;
     rivista = new QLineEdit;
     volume = new QSpinBox;
-    volume->setRange(0, 99999);
+    volume->setRange(1, 99999);
     pagineArt = new QSpinBox;
-    pagineArt->setRange(0, 99999);
+    pagineArt->setRange(1, 99999);
     layout->addRow("Autore:", autoreArt);
     layout->addRow("Rivista:", rivista);
     layout->addRow("Volume:", volume);
@@ -105,11 +111,16 @@ std::unique_ptr<Media> MediaFormWidget::creaMedia() const {
 
     switch (tipoGroup->checkedId()) {
     case 0:
-        return std::make_unique<Libro>(
-            titolo->text(), genere->text(), anno->value(),
-            autoreLib->text(), editore->text(), pagineLib->value(), isbn->text());
+        if(MediaRepo::instance().checkLibro(isbn->text())) {
+            QString cleanIsbn = isbn->text().remove(' ').remove('-');
+
+            return std::make_unique<Libro>(
+                titolo->text(), genere->text(), anno->value(),
+                autoreLib->text(), editore->text(), pagineLib->value(), cleanIsbn);
+        }
+        return nullptr;
     case 1:
-        list = cast->text().split(",", Qt::SkipEmptyParts);
+        list = cast->toPlainText().split(",", Qt::SkipEmptyParts);
         for (QString &item : list) {
             item = item.trimmed();
         }
@@ -125,10 +136,116 @@ std::unique_ptr<Media> MediaFormWidget::creaMedia() const {
     }
 }
 
+void MediaFormWidget::caricaMedia(Media* media) {
+    if (!media) return;
 
-//TODO: Finire implementazione se dovesse servire
-void MediaFormWidget::cambiaTipo(int index) {
-    // Esempio: mostra/nasconde widget in base al tipo selezionato
-    qDebug() << "Tipo selezionato:" << index;
-    // Implementazione reale qui...
+    // Campi comuni
+    titolo->setText(media->getTitolo());
+    genere->setText(media->getGenere());
+    anno->setValue(media->getAnno());
+    id->setText(media->getId());
+
+    // Cast ai sottotipi e riempi form specifico
+    if (Libro* l = dynamic_cast<Libro*>(media)) {
+        tipoGroup->button(0)->setChecked(true);
+        stack->setCurrentIndex(0);
+        autoreLib->setText(l->getAutore());
+        editore->setText(l->getEditore());
+        pagineLib->setValue(l->getPagine());
+        isbn->setText(l->getIsbn());
+    } else if (Film* f = dynamic_cast<Film*>(media)) {
+        tipoGroup->button(1)->setChecked(true);
+        stack->setCurrentIndex(1);
+        regista->setText(f->getRegista());
+        durata->setValue(f->getDurata());
+        cast->setText(f->getCast().join(", "));
+    } else if (Articolo* a = dynamic_cast<Articolo*>(media)) {
+        tipoGroup->button(2)->setChecked(true);
+        stack->setCurrentIndex(2);
+        autoreArt->setText(a->getAutore());
+        rivista->setText(a->getRivista());
+        volume->setValue(a->getVolume());
+        pagineArt->setValue(a->getPagine());
+    }
+}
+
+bool MediaFormWidget::aggiornaMedia(Media* media) {
+    if (!media) return false;
+
+    // Campi comuni
+    media->setTitolo(titolo->text());
+    media->setGenere(genere->text());
+    media->setAnno(anno->value());
+
+    // Genera nuovo ID univoco
+    int count = MediaRepo::instance().countMedia(media);
+    media->setId(media->generaId(count));
+
+    if (Libro* l = dynamic_cast<Libro*>(media)) {
+        if(MediaRepo::instance().checkLibro(isbn->text())) {
+            QString cleanIsbn = isbn->text().remove(' ').remove('-');
+            l->setAutore(autoreLib->text());
+            l->setEditore(editore->text());
+            l->setPagine(pagineLib->value());
+            l->setIsbn(cleanIsbn);
+        }
+    } else if (Film* f = dynamic_cast<Film*>(media)) {
+        f->setRegista(regista->text());
+        f->setDurata(durata->value());
+        QStringList list = cast->toPlainText().split(",", Qt::SkipEmptyParts);
+        for (QString& s : list) s = s.trimmed();
+        f->setCast(list);
+    } else if (Articolo* a = dynamic_cast<Articolo*>(media)) {
+        a->setAutore(autoreArt->text());
+        a->setRivista(rivista->text());
+        a->setVolume(volume->value());
+        a->setPagine(pagineArt->value());
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
+QString MediaFormWidget::getTipoSelezionato() {
+    int id = tipoGroup->checkedId();
+    switch(id) {
+    case 0: return "Libro";
+    case 1: return "Film";
+    case 2: return "Articolo";
+    default: return "";
+    }
+}
+
+void MediaFormWidget::pulisciCampi() {
+    titolo->clear();
+    genere->clear();
+    anno->setValue(2025);  // o un valore neutro
+    id->clear();
+    int idCheck = tipoGroup->checkedId();
+    radioLibro->setChecked(true);
+    radioFilm->setChecked(false);
+    radioArticolo->setChecked(false);
+    // altri campi (tutti i campi di libro, film, articolo)
+    switch(idCheck) {
+        case 0: //Libro
+            autoreLib->clear();
+            editore->clear();
+            pagineLib->setValue(0);
+            isbn->clear();
+            break;
+        case 1: // Film
+            regista->clear();
+            durata->setValue(0);
+            cast->clear();
+            break;
+        case 2: // Articolo
+            autoreArt->clear();
+            rivista->clear();
+            volume->setValue(0);
+            pagineArt->setValue(0);
+            break;
+        default:
+            break;
+    }
 }

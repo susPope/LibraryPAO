@@ -7,7 +7,10 @@
 #include "film.h"
 #include "articolo.h"
 
-MediaRepo::MediaRepo() {}
+MediaRepo::MediaRepo() {
+    svuota();
+    caricaDaJson();
+}
 
 MediaRepo::~MediaRepo() {
     svuota(); // Libera memoria all'uscita
@@ -20,6 +23,18 @@ MediaRepo& MediaRepo::instance() {
 
 void MediaRepo::aggiungiMedia(std::unique_ptr<Media> m) {
     mediaList.push_back(std::move(m));
+    salvaSuJson();
+}
+
+void MediaRepo::aggiornaMedia(Media* m) {
+
+    if (auto l = dynamic_cast<Libro*>(m))
+        qInfo() << "Modificato Libro: " << l->getTitolo() << "Autore: " << l->getAutore();
+    else if (auto f = dynamic_cast<Film*>(m))
+        qInfo() << "Modificato Film: " << f->getTitolo() << "Regista: " << f->getRegista();
+    else if (auto a = dynamic_cast<Articolo*>(m))
+        qInfo() << "Modificato Articolo: " << a->getTitolo() << "Autore: " << a->getAutore();
+
     salvaSuJson();
 }
 
@@ -37,6 +52,12 @@ bool MediaRepo::rimuoviMedia(Media* m) {
 
 const std::vector<std::unique_ptr<Media>>& MediaRepo::getTuttiIMedia() const {
     return mediaList;
+}
+
+void MediaRepo::svuotaDB() {
+    svuota();
+    salvaSuJson();
+    qInfo() << "DataBase eliminato";
 }
 
 void MediaRepo::svuota() {
@@ -70,4 +91,130 @@ void MediaRepo::salvaSuJson() {
     } else {
         qWarning() << "Errore apertura file:" << file.errorString();
     }
+}
+
+void MediaRepo::caricaDaJson() {
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Impossibile aprire il file per la lettura:" << file.errorString();
+        return;
+    }
+
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData, &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        qWarning() << "Errore parsing JSON:" << parseError.errorString();
+        return;
+    }
+
+    QJsonObject root = doc.object();
+
+    auto aggiungiDaArray = [this](const QJsonArray& array, const QString& tipo) {
+        for (const QJsonValue& val : array) {
+            QJsonObject obj = val.toObject();
+            std::unique_ptr<Media> m;
+
+            if (tipo == "libri")      m = std::make_unique<Libro>(Libro::fromJson(obj));
+            else if (tipo == "film")  m = std::make_unique<Film>(Film::fromJson(obj));
+            else if (tipo == "articoli") m = std::make_unique<Articolo>(Articolo::fromJson(obj));
+
+            if (m) mediaList.push_back(std::move(m));
+        }
+    };
+
+    aggiungiDaArray(root["libri"].toArray(), "libri");
+    aggiungiDaArray(root["film"].toArray(), "film");
+    aggiungiDaArray(root["articoli"].toArray(), "articoli");
+
+    qDebug() << "Caricati" << mediaList.size() << "media dal JSON.";
+}
+
+// CONTROLLI
+bool MediaRepo::checkLibro(const QString& isbn) {
+    // Rimuovi spazi e trattini
+    QString cleaned = isbn;
+    cleaned.remove(' ');
+    cleaned.remove('-');
+    int len = cleaned.length();
+
+    return (len == 10 || len == 13);
+}
+
+// Cerca l'ultimo numero di disambiguità negli id con titoloe autore uguali per creare un id univoco
+int MediaRepo::countMedia(Media* media) {
+    if (!media) return 0;
+
+    QString titolo = media->getTitolo().simplified().remove(' ').toUpper();
+    QString autore_regista;
+    QString tipo;
+
+    // Determina tipo e autore/regista
+    if (auto* libro = dynamic_cast<Libro*>(media)) {
+        autore_regista = libro->getAutore().simplified().remove(' ').toUpper();
+        tipo = "Libro";
+    } else if (auto* film = dynamic_cast<Film*>(media)) {
+        autore_regista = film->getRegista().simplified().remove(' ').toUpper();
+        tipo = "Film";
+    } else if (auto* articolo = dynamic_cast<Articolo*>(media)) {
+        autore_regista = articolo->getAutore().simplified().remove(' ').toUpper();
+        tipo = "Articolo";
+    } else {
+        return 0; // Tipo sconosciuto
+    }
+
+    int maxCount = -1;
+
+    for (const auto& mediaPtr : mediaList) {
+        QString id = mediaPtr->getId();
+
+        if (tipo == "Libro") {
+            if (auto* libro = dynamic_cast<Libro*>(mediaPtr.get())) {
+                QString t = libro->getTitolo().simplified().remove(' ').toUpper();
+                QString a = libro->getAutore().simplified().remove(' ').toUpper();
+                if (t == titolo && a == autore_regista) {
+                    // Estrai numero da ID: LIB-TITOLO-AUTORE-<numero>
+                    QStringList parts = id.split("-");
+                    if (parts.size() >= 4) {
+                        bool ok = false;
+                        int numero = parts.last().toInt(&ok);
+                        if (ok && numero > maxCount)
+                            maxCount = numero;
+                    }
+                }
+            }
+        } else if (tipo == "Film") {
+            if (auto* film = dynamic_cast<Film*>(mediaPtr.get())) {
+                QString t = film->getTitolo().simplified().remove(' ').toUpper();
+                QString r = film->getRegista().simplified().remove(' ').toUpper();
+                if (t == titolo && r == autore_regista) {
+                    QStringList parts = id.split("-");
+                    if (parts.size() >= 4) {
+                        bool ok = false;
+                        int numero = parts.last().toInt(&ok);
+                        if (ok && numero > maxCount)
+                            maxCount = numero;
+                    }
+                }
+            }
+        } else if (tipo == "Articolo") {
+            if (auto* art = dynamic_cast<Articolo*>(mediaPtr.get())) {
+                QString t = art->getTitolo().simplified().remove(' ').toUpper();
+                QString a = art->getAutore().simplified().remove(' ').toUpper();
+                if (t == titolo && a == autore_regista) {
+                    QStringList parts = id.split("-");
+                    if (parts.size() >= 4) {
+                        bool ok = false;
+                        int numero = parts.last().toInt(&ok);
+                        if (ok && numero > maxCount)
+                            maxCount = numero;
+                    }
+                }
+            }
+        }
+    }
+
+    return maxCount + 1;
 }

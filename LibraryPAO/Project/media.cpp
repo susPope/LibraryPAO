@@ -32,3 +32,28 @@ void Media::setAnno(const int& nuovoanno) {
         qWarning() << "Anno non valido";
     }
 }
+void Media::setId(const QString& nuovoId) {
+    if (!nuovoId.isEmpty()) {
+        Media::id = nuovoId;
+    } else {
+        qWarning() << "ID non valido";
+    }
+}
+
+void Media::setDisponibilita(bool nuovaDisponibilita) {
+    Media::disponibile = nuovaDisponibilita;
+}
+void Media::setNprestiti(int nuovoNprestiti) {
+    if (nuovoNprestiti >= 0) {
+        Media::nprestiti = nuovoNprestiti;
+    } else {
+        qWarning() << "Numero di prestiti non valido";
+    }
+}
+void Media::setProssimaDisponibilita(const QDate& nuovaproxdisponibilita) {
+    if (nuovaproxdisponibilita.isValid()) {
+        Media::proxDisp = nuovaproxdisponibilita;
+    } else {
+        qWarning() << "Data di disponibilità non valida";
+    }
+}

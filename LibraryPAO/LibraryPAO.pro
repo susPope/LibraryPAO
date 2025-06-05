@@ -10,6 +10,7 @@ CONFIG += c++17
 
 # Sources - usa solo percorsi corretti e rimuovi duplicati
 SOURCES += \
+    GUI/MediaManager/mediaviewwidget.cpp \
     GUI/loanmanagerwidget.cpp \
     GUI/mediaformwidget.cpp \
     GUI/mediamanagerwidget.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 # Headers - solo percorsi esistenti
 HEADERS += \
+    GUI/MediaManager/mediaviewwidget.h \
     GUI/loanmanagerwidget.h \
     GUI/mainwindow.h \
     GUI/mediaformwidget.h \
@@ -35,9 +37,6 @@ HEADERS += \
     Project/media.h \
     Project/mediarepo.h
 
-FORMS += \
-    GUI/mainwindow.ui \
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
@@ -45,4 +44,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES +=
 
-RESOURCES +=
+RESOURCES += \
+    resources/resources.qrc

@@ -13,15 +13,21 @@ Libro::Libro(const QString& titolo, const QString& genere, int anno,
     qDebug() << "Creato libro: " << titolo;
 }
 
+Libro::Libro() : Media(), autore(""), editore(""), pagine(0), isbn("") {}
+
 // Distruttore
 Libro::~Libro() {
     qDebug() << "Distrutto libro:" << getTitolo();
 }
 
 // Implementazione metodo polimorfo per generare ID
-QString Libro::generaId() const {
-    return QString("LIB-%1-%2").arg(editore.left(3).toUpper(), isbn);
+QString Libro::generaId(int count) const {
+    QString cleanTitolo = getTitolo().simplified().remove(' ').toUpper();
+    QString cleanAutore = autore.simplified().remove(' ').toUpper();
+
+    return QString("LIB-%1-%2-%3").arg(cleanTitolo, cleanAutore, QString::number(count));
 }
+
 
 // Implementazione altri metodi polimorfi
 QString Libro::mostraDettagli() const {
@@ -53,6 +59,26 @@ QJsonObject Libro::toJson() const {
     obj["isbn"] = isbn;
 
     return obj;
+}
+
+Libro Libro::fromJson(const QJsonObject& obj) {
+    // Costruzione base (può anche essere un Articolo() vuoto se serve)
+    Libro l;
+    l.setTitolo(obj["titolo"].toString());
+    l.setGenere(obj["genere"].toString());
+    l.setAnno(obj["anno"].toInt());
+    l.setId(obj["id"].toString());
+    l.setDisponibilita(obj["disponibile"].toBool());
+    l.setNprestiti(obj["nprestiti"].toInt());
+    l.setProssimaDisponibilita(QDate::fromString(obj["proxDisp"].toString(), Qt::ISODate));
+
+    // Attributi specifici di Libro
+    l.setAutore(obj["autore"].toString());
+    l.setEditore(obj["editore"].toString());
+    l.setPagine(obj["pagine"].toInt());
+    l.setIsbn(obj["isbn"].toString());
+
+    return l;
 }
 
 

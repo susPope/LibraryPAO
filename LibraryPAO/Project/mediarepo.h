@@ -14,10 +14,16 @@ public:
 
     // Gestione RAM
     void aggiungiMedia(std::unique_ptr<Media> m);
+    void aggiornaMedia(Media* m);
     bool rimuoviMedia(Media* m);
+    void svuotaDB();
     const std::vector<std::unique_ptr<Media>>& getTuttiIMedia() const;
 
+    // Controlli per l'inserimento e la modifica
+    bool checkLibro(const QString& isbn);
+
     void svuota();
+    int countMedia(Media* media);
 
 private:
     MediaRepo(); // Costruttore privato per singleton
@@ -28,6 +34,7 @@ private:
 
     // Gestione JSON
     void salvaSuJson();
+    void caricaDaJson();
 };
 
 #endif // MEDIAREPOSITORY_H

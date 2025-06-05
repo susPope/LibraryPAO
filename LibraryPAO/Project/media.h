@@ -18,18 +18,14 @@ public:
     // Costruttori / Distruttori
     Media(const QString &titolo, const QString &genere, int anno,
           bool disponibile = true, int nprestiti = 0);
+    Media() : titolo(""), genere(""), anno(0), id(""), disponibile(true),
+        nprestiti(0), proxDisp(QDate::currentDate()){}
     virtual ~Media() = default; // Distruttore puro -> classe astratta
-
-    /* Metodi:
-        - prenota
-        - restituisci
-        - ???
-    */
 
     // Metodi polimorfi (non banali)
     virtual QString mostraDettagli() const = 0;
     virtual QDate calcolaPrestito(int days) const = 0;
-    virtual QString generaId() const = 0;
+    virtual QString generaId(int count) const = 0;
     virtual QJsonObject toJson() const = 0;
     // Metodo polimorfo #3: Creazione widget UI
     //virtual QWidget* createDetailsWidget(QWidget* parent = nullptr) const = 0;
@@ -47,7 +43,10 @@ public:
     void setTitolo(const QString& nuovotitolo);
     void setGenere(const QString& nuovogenere);
     void setAnno(const int& nuovoanno);
-    //QDate setProssimaDisponibilita(const QDate& nuovaproxdisponibilita);
+    void setId(const QString& nuovoId);
+    void setDisponibilita(bool nuovaDisponibilita);
+    void setNprestiti(int nuovoNprestiti);
+    void setProssimaDisponibilita(const QDate& nuovaproxdisponibilita);
 };
 
 #endif // MEDIA_H

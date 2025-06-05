@@ -15,14 +15,19 @@ Articolo::Articolo(const QString& titolo, const QString& genere, int anno,
     qDebug() << "Creata rivista:" << titolo;
 }
 
+Articolo::Articolo() : Media(), autore(""), rivista(""), volume(0), pagine(0) {}
+
 // Distruttore (implementazione anche se 'default')
 Articolo::~Articolo(){
     qDebug() << "Distrutto rivista: " << getId();
 }
 
 // Implementazione metodo polimorfo per generare ID
-QString Articolo::generaId() const {
-        return QString("ART-%1-%2").arg(rivista.left(3).toUpper(), (volume+getAnno()));
+QString Articolo::generaId(int count) const {
+    QString cleanTitolo = getTitolo().simplified().remove(' ').toUpper();
+    QString cleanAutore = autore.simplified().remove(' ').toUpper();
+
+    return QString("ART-%1-%2-%3").arg(cleanTitolo, cleanAutore, QString::number(count));
 }
 
 // Implementazione metodi polimorfi
@@ -56,6 +61,26 @@ QJsonObject Articolo::toJson() const {
     obj["pagine"] = pagine;
 
     return obj;
+}
+
+Articolo Articolo::fromJson(const QJsonObject& obj) {
+    // Costruzione base (può anche essere un Articolo() vuoto se serve)
+    Articolo a;
+    a.setTitolo(obj["titolo"].toString());
+    a.setGenere(obj["genere"].toString());
+    a.setAnno(obj["anno"].toInt());
+    a.setId(obj["id"].toString());
+    a.setDisponibilita(obj["disponibile"].toBool());
+    a.setNprestiti(obj["nprestiti"].toInt());
+    a.setProssimaDisponibilita(QDate::fromString(obj["proxDisp"].toString(), Qt::ISODate));
+
+    // Attributi specifici di Articolo
+    a.setAutore(obj["autore"].toString());
+    a.setRivista(obj["rivista"].toString());
+    a.setVolume(obj["volume"].toInt());
+    a.setPagine(obj["pagine"].toInt());
+
+    return a;
 }
 
 // SETTER implementations

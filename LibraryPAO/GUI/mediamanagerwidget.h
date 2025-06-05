@@ -19,12 +19,15 @@ private slots:
     void addMedia();
     void editSelectedMedia();
     void deleteSelectedMedia();
+    void deleteAllMedia();
+    void populateFormFromSelected(QListWidgetItem* item);
 
 private:
     QListWidget *mediaList;
     QPushButton *addButton;
     QPushButton *editButton;
     QPushButton *deleteButton;
+    QPushButton *deleteDBButton;
     MediaFormWidget* mediaForm;
 
     Media* getMediaFromItem(QListWidgetItem* item);

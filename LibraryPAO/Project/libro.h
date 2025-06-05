@@ -13,16 +13,19 @@ private:
 
 public:
     // Costruttori / Distruttori
+    Libro();
     Libro(const QString& titolo, const QString& genere, int anno,
           const QString& autore, const QString& editore,
           int pagine, const QString& isbn);
     ~Libro() override;  // Distruttore esplicito
 
     // Implementazione metodi polimorfi
-    QString generaId() const override;
+    QString generaId(int count) const override;
     QString mostraDettagli() const override;
     QDate calcolaPrestito(int days) const override;
     QJsonObject toJson() const override;
+
+    static Libro fromJson(const QJsonObject& obj);
 
     // GETTER
     QString getAutore() const { return autore; }

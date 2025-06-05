@@ -13,15 +13,19 @@ private:
 
 public:
     //Film(const QString& regista, int durata, const QStringList& cast);
+    Film();
     Film(const QString& titolo, const QString& genere, int anno,
           const QString& regista, int durata, const QStringList& cast);
     ~Film() override;
 
     // Implementazione metodi polimorfi
-    QString generaId() const override;
+    QString generaId(int count) const override;
     QString mostraDettagli() const override;
     QDate calcolaPrestito(int days) const override;
     QJsonObject toJson() const override;
+
+    static Film fromJson(const QJsonObject& obj);
+
 
     // GETTER
     QString getRegista() const { return regista; }

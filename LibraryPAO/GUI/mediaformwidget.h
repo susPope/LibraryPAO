@@ -9,6 +9,8 @@
 #include <QDate>
 #include <QSpinBox>
 #include <QButtonGroup>
+#include <QPushButton>
+#include <QTextEdit>
 #include <memory>
 
 #include "Project/media.h"
@@ -19,9 +21,12 @@ class MediaFormWidget : public QWidget {
 public:
     explicit MediaFormWidget(QWidget *parent = nullptr);
     std::unique_ptr<Media> creaMedia() const;
+    void pulisciCampi();
 
-private slots:
-    void cambiaTipo(int index); // TODO: Valutare se eliminare questo metodo
+    // Metodi per il modifica Media (editMedia())
+    void caricaMedia(Media* media);
+    bool aggiornaMedia(Media* media);
+    QString getTipoSelezionato();
 
 private:
     // Selettore tipo media
@@ -45,13 +50,16 @@ private:
     // Campi film
     QLineEdit *regista;
     QSpinBox *durata;
-    QLineEdit *cast;
+    QTextEdit *cast;
 
     // Campi articolo
     QLineEdit *autoreArt;
     QLineEdit *rivista;
     QSpinBox *volume;
     QSpinBox *pagineArt;
+
+    // Campi per id
+    QLineEdit* id;
 
     // Metodi per creare i form
     QWidget* creaFormMedia();
