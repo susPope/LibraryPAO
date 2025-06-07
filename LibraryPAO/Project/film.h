@@ -21,7 +21,7 @@ public:
     // Implementazione metodi polimorfi
     QString generaId(int count) const override;
     QString mostraDettagli() const override;
-    QDate calcolaPrestito(int days) const override;
+    QDate calcolaPrestito() const override;
     QJsonObject toJson() const override;
 
     static Film fromJson(const QJsonObject& obj);

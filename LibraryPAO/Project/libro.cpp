@@ -35,8 +35,9 @@ QString Libro::mostraDettagli() const {
         .arg(getTitolo(), autore, editore).arg(pagine).arg(isbn);
 }
 
-QDate Libro::calcolaPrestito(int days) const {
-    return QDate::currentDate().addDays(days);
+QDate Libro::calcolaPrestito() const {
+    // Film hanno prestito più lungo (30 giorni)
+    return QDate::currentDate().addDays(30);
 }
 
 QJsonObject Libro::toJson() const {

@@ -7,11 +7,10 @@ class QPushButton;
 class QStackedWidget;
 
 class MediaManagerWidget;
-class SearchWidget;
+//class SearchWidget;
 class LoanManagerWidget;
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -19,17 +18,17 @@ public:
 
 private slots:
     void showMediaManager();
-    void showSearchMedia();
+    //void showSearchMedia();
     void showLoanManager();
 
 private:
     QPushButton *gestioneBtn;
-    QPushButton *ricercaBtn;
+    //QPushButton *ricercaBtn;
     QPushButton *prestitiBtn;
 
     QStackedWidget *stackedWidget;
     MediaManagerWidget *mediaWidget;
-    SearchWidget *searchWidget;
+    //SearchWidget *searchWidget;
     LoanManagerWidget *loanWidget;
 };
 

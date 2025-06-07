@@ -2,7 +2,71 @@
     "articoli": [
     ],
     "film": [
+        {
+            "anno": 2025,
+            "cast": [
+                "qweqwe",
+                "qwe",
+                "wqe",
+                "qw",
+                "e",
+                "qwe",
+                "wq",
+                "e"
+            ],
+            "disponibile": true,
+            "durata": 1,
+            "genere": "wewweqq",
+            "id": "FIL-PLISCO-QWEQWE-0",
+            "nprestiti": 3,
+            "proxDisp": "2025-06-07",
+            "regista": "qweqwe",
+            "tipo": "Libro",
+            "titolo": "plisco"
+        }
     ],
     "libri": [
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": false,
+            "editore": "qweqweq",
+            "genere": "wqeqweqwe",
+            "id": "LIB-POLLO-QWEQWE-0",
+            "isbn": "1234567890",
+            "nprestiti": 6,
+            "pagine": 1,
+            "proxDisp": "2025-07-07",
+            "tipo": "Libro",
+            "titolo": "pollo"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqw",
+            "disponibile": true,
+            "editore": "qweqwe",
+            "genere": "qeqwe",
+            "id": "LIB-POLIPO12-QWEQW-2",
+            "isbn": "1234567889",
+            "nprestiti": 3,
+            "pagine": 1,
+            "proxDisp": "2025-06-07",
+            "tipo": "Libro",
+            "titolo": "polipo12"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": true,
+            "editore": "qweqweqw",
+            "genere": "qweqweqweqwe",
+            "id": "LIB-QWEQWE-QWEQWE-0",
+            "isbn": "1234567899",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-05",
+            "tipo": "Libro",
+            "titolo": "qweqwe"
+        }
     ]
 }

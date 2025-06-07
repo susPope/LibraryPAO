@@ -1,60 +1,39 @@
 #include "searchwidget.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QListWidget>
-#include <QString>
-#include <QMessageBox>
+SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
+    criterioCombo = new QComboBox(this);
+    criterioCombo->addItem("Titolo");
+    criterioCombo->addItem("Autore o Regista");
 
-SearchWidget::SearchWidget(QWidget *parent)
-    : QWidget(parent)
-{
-    searchInput = new QLineEdit(this);
-    searchButton = new QPushButton("Cerca", this);
-    resultsList = new QListWidget(this);
+    searchEdit = new QLineEdit(this);
+    searchEdit->setPlaceholderText("Cerca...");
 
-    QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->addWidget(searchInput);
-    searchLayout->addWidget(searchButton);
+    searchButton = new QPushButton("🔍 Cerca", this);
+    searchButton->setToolTip("Avvia la ricerca");
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(searchLayout);
-    mainLayout->addWidget(resultsList);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->addWidget(criterioCombo);
+    layout->addWidget(searchEdit);
+    layout->addWidget(searchButton);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
 
-    setLayout(mainLayout);
-    setWindowTitle("Ricerca Media");
-
-    connect(searchButton, SIGNAL(clicked()), this, SLOT(performSearch()));
+    connect(searchEdit, &QLineEdit::textEdited, this, &SearchWidget::onTextEdited);
+    connect(searchButton, &QPushButton::clicked, this, &SearchWidget::onCercaClicked);
 }
 
-void SearchWidget::performSearch()
-{
-    QString query = searchInput->text().trimmed();
+QString SearchWidget::getTestoRicerca() const {
+    return searchEdit->text().trimmed();
+}
 
-    resultsList->clear();
+QString SearchWidget::getCriterioRicerca() const {
+    return criterioCombo->currentText();  // o il nome corretto della QComboBox
+}
 
-    if (query.isEmpty()) {
-        QMessageBox::information(this, "Ricerca", "Inserisci un termine di ricerca.");
-        return;
-    }
+void SearchWidget::onTextEdited(const QString& testo) {
+    emit ricercaAvviata(testo.trimmed(), criterioCombo->currentText());
+}
 
-    // Simulazione risultati fittizi
-    QStringList mediaFinti;
-    mediaFinti << "Libro: Il Signore degli Anelli"
-               << "Film: Il Padrino"
-               << "Articolo: Quantum Computing 101"
-               << "Libro: La Divina Commedia"
-               << "Film: Matrix";
-
-    for (int i = 0; i < mediaFinti.size(); ++i) {
-        if (mediaFinti[i].contains(query, Qt::CaseInsensitive)) {
-            resultsList->addItem(mediaFinti[i]);
-        }
-    }
-
-    if (resultsList->count() == 0) {
-        resultsList->addItem("Nessun risultato trovato.");
-    }
+void SearchWidget::onCercaClicked() {
+    emit ricercaAvviata(getTestoRicerca(), criterioCombo->currentText());
 }

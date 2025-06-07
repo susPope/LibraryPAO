@@ -24,7 +24,7 @@ public:
 
     // Metodi polimorfi (non banali)
     virtual QString mostraDettagli() const = 0;
-    virtual QDate calcolaPrestito(int days) const = 0;
+    virtual QDate calcolaPrestito() const = 0;
     virtual QString generaId(int count) const = 0;
     virtual QJsonObject toJson() const = 0;
     // Metodo polimorfo #3: Creazione widget UI

@@ -36,10 +36,9 @@ QString Articolo::mostraDettagli() const {
         .arg(getTitolo(), autore, rivista).arg(volume).arg(pagine);
 }
 
-QDate Articolo::calcolaPrestito(int days) const {
-    // Film hanno prestito più breve (es. 7 giorni)
-    //TODO: decidere prestito
-    return QDate::currentDate().addDays(days > 7 ? 7 : days);
+QDate Articolo::calcolaPrestito() const {
+    // Articoli hanno prestito brevissimo (2 giorni)
+    return QDate::currentDate().addDays(2);
 }
 
 QJsonObject Articolo::toJson() const {

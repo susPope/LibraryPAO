@@ -37,9 +37,9 @@ QString Film::mostraDettagli() const {
     return dettagli;
 }
 
-QDate Film::calcolaPrestito(int days) const {
-    // Film hanno prestito più breve (es. 7 giorni)
-    return QDate::currentDate().addDays(days > 7 ? 7 : days);
+QDate Film::calcolaPrestito() const {
+    // Film hanno prestito più breve (7 giorni)
+    return QDate::currentDate().addDays(7);
 }
 
 QJsonObject Film::toJson() const {

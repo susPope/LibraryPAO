@@ -2,6 +2,7 @@
 #define MANAGEMEDIAWIDGET_H
 
 #include "mediaformwidget.h"
+#include "searchwidget.h"
 #include <QWidget>
 #include <QListWidgetItem>
 
@@ -21,6 +22,8 @@ private slots:
     void deleteSelectedMedia();
     void deleteAllMedia();
     void populateFormFromSelected(QListWidgetItem* item);
+    void onRicercaAvviata(const QString& testo, const QString& criterio);
+
 
 private:
     QListWidget *mediaList;
@@ -29,6 +32,7 @@ private:
     QPushButton *deleteButton;
     QPushButton *deleteDBButton;
     MediaFormWidget* mediaForm;
+    SearchWidget* searchWidget;
 
     Media* getMediaFromItem(QListWidgetItem* item);
 };

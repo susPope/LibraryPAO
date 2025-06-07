@@ -25,6 +25,14 @@ public:
     void svuota();
     int countMedia(Media* media);
 
+    // Gestione Ricerca
+    std::vector<Media*> cercaMedia(const QString& testo, const QString& criterio);
+    std::vector<Media*> cercaPrestiti(const QString& testo, const QString& criterio, const QString& filtroDisponibilità);
+
+    //Gestione Prestiti
+    void aggiungiPrestito(Media* m);
+    void restituisciPrestito(Media* m);
+
 private:
     MediaRepo(); // Costruttore privato per singleton
     ~MediaRepo();

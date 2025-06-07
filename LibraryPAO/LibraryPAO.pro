@@ -10,6 +10,7 @@ CONFIG += c++17
 
 # Sources - usa solo percorsi corretti e rimuovi duplicati
 SOURCES += \
+    GUI/LoanManager/loanviewwidget.cpp \
     GUI/MediaManager/mediaviewwidget.cpp \
     GUI/loanmanagerwidget.cpp \
     GUI/mediaformwidget.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 # Headers - solo percorsi esistenti
 HEADERS += \
+    GUI/LoanManager/loanviewwidget.h \
     GUI/MediaManager/mediaviewwidget.h \
     GUI/loanmanagerwidget.h \
     GUI/mainwindow.h \

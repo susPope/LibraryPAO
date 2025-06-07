@@ -2,25 +2,32 @@
 #define SEARCHWIDGET_H
 
 #include <QWidget>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QComboBox>
 
-class QLineEdit;
-class QPushButton;
-class QListWidget;
-
-class SearchWidget : public QWidget
-{
+class SearchWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit SearchWidget(QWidget *parent = nullptr);
+    explicit SearchWidget(QWidget* parent = nullptr);
+
+    QString getTestoRicerca() const;
+    QString getCriterioRicerca() const;
+
+signals:
+    void ricercaAvviata(const QString& testo, const QString& criterio);
+
 
 private slots:
-    void performSearch();
+    void onTextEdited(const QString& testo);
+    void onCercaClicked();
 
 private:
-    QLineEdit *searchInput;
-    QPushButton *searchButton;
-    QListWidget *resultsList;
+    QLineEdit* searchEdit;
+    QPushButton* searchButton;
+    QComboBox* criterioCombo;
 };
 
 #endif // SEARCHWIDGET_H

@@ -27,13 +27,14 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     buttonLayout->addWidget(deleteButton);
     buttonLayout->addWidget(deleteDBButton);
 
+    searchWidget = new SearchWidget(this); // Barra di ricerca
+
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(mediaList);
     centralLayout->addWidget(mediaForm);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    //mainLayout->addWidget(mediaList);
-    //mainLayout->addWidget(mediaForm);
+    mainLayout->addWidget(searchWidget);
     mainLayout->addLayout(centralLayout);
     mainLayout->addLayout(buttonLayout);
 
@@ -43,9 +44,6 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     const auto& tuttiIMedia = MediaRepo::instance().getTuttiIMedia();
     for (const auto& ptr : tuttiIMedia) {
         Media* m = ptr.get();
-        //QListWidgetItem* item = new QListWidgetItem(m->getTitolo());
-        //item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
-        //mediaList->addItem(item);
 
         QListWidgetItem* item = new QListWidgetItem();
         MediaViewWidget* widget = new MediaViewWidget(m);
@@ -61,6 +59,7 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteSelectedMedia()));
     connect(deleteDBButton, SIGNAL(clicked()), this, SLOT(deleteAllMedia()));
     connect(mediaList, &QListWidget::itemClicked, this, &MediaManagerWidget::populateFormFromSelected);
+    connect(searchWidget, &SearchWidget::ricercaAvviata, this, &MediaManagerWidget::onRicercaAvviata);
 }
 
 void MediaManagerWidget::addMedia() {
@@ -176,5 +175,22 @@ void MediaManagerWidget::populateFormFromSelected(QListWidgetItem* item) {
     if (media) {
         mediaForm->caricaMedia(media);  // Metodo che devi implementare in MediaFormWidget
     }
+}
+
+void MediaManagerWidget::onRicercaAvviata(const QString& testo, const QString& criterio) {
+    // Puliamo la lista attuale
+    mediaList->clear();
+
+    // Recupera tutti i media filtrati dal repository
+    auto risultati = MediaRepo::instance().cercaMedia(testo, criterio);
+    for (Media* m : risultati) {
+        QListWidgetItem* item = new QListWidgetItem();
+        MediaViewWidget* widget = new MediaViewWidget(m);
+        item->setSizeHint(widget->sizeHint());
+        mediaList->addItem(item);
+        mediaList->setItemWidget(item, widget);
+        item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
+    }
+
 }
 

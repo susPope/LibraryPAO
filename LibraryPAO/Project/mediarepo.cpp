@@ -1,6 +1,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QDebug>
+#include <QDate>
 #include <algorithm>    // per std::remove_if
 #include "mediarepo.h"
 #include "libro.h"
@@ -218,3 +219,86 @@ int MediaRepo::countMedia(Media* media) {
 
     return maxCount + 1;
 }
+
+std::vector<Media*> MediaRepo::cercaMedia(const QString& testo, const QString& criterio) {
+    std::vector<Media*> risultati;
+    for (const auto& mediaPtr : mediaList) {
+        Media* m = mediaPtr.get();  // non trasferisce la proprietà
+        if (criterio == "Titolo") {
+            if (m->getTitolo().contains(testo, Qt::CaseInsensitive)) {
+                risultati.push_back(m);
+            }
+        } else if (criterio == "Autore o Regista") {
+            bool match = false;
+            if (auto libro = dynamic_cast<Libro*>(m)) {
+                match = libro->getAutore().contains(testo, Qt::CaseInsensitive);
+            } else if (auto articolo = dynamic_cast<Articolo*>(m)) {
+                match = articolo->getAutore().contains(testo, Qt::CaseInsensitive);
+            } else if (auto film = dynamic_cast<Film*>(m)) {
+                match = film->getRegista().contains(testo, Qt::CaseInsensitive);
+            }
+            if (match)
+                risultati.push_back(m);
+        }
+    }
+    return risultati;
+}
+
+void MediaRepo::aggiungiPrestito(Media* m) {
+    if (m->getDisponibilita()) {
+        m->setProssimaDisponibilita(m->calcolaPrestito());
+        m->setDisponibilita(false); // Non disponibile
+        m->setNprestiti(m->getNprestiti()+1);
+
+        salvaSuJson();
+    } else {
+        qWarning() << "Libro non disponibile. Non può essere prenotato!";
+    }
+}
+
+void MediaRepo::restituisciPrestito(Media* m){
+    if (!m->getDisponibilita()) {
+        m->setProssimaDisponibilita(QDate::currentDate());
+        m->setDisponibilita(true); // Disponibile
+
+        salvaSuJson();
+    } else {
+        qWarning() << "Libro non prenotato. Non può essere restituito!";
+    }
+}
+
+std::vector<Media*> MediaRepo::cercaPrestiti(const QString& testo, const QString& criterio, const QString& filtroDisponibilita) {
+    std::vector<Media*> risultati;
+
+    for (const auto& mediaPtr : mediaList) {
+        Media* m = mediaPtr.get();
+
+        // Filtro disponibilità
+        if (filtroDisponibilita == "In prestito" && m->getDisponibilita())
+            continue;
+        else if (filtroDisponibilita == "Disponibili" && !m->getDisponibilita())
+            continue;
+        // Se "Tutti", non filtriamo
+
+        // Filtro testo e criterio
+        if (criterio == "Titolo") {
+            if (m->getTitolo().contains(testo, Qt::CaseInsensitive)) {
+                risultati.push_back(m);
+            }
+        } else if (criterio == "Autore o Regista") {
+            bool match = false;
+            if (auto libro = dynamic_cast<Libro*>(m)) {
+                match = libro->getAutore().contains(testo, Qt::CaseInsensitive);
+            } else if (auto articolo = dynamic_cast<Articolo*>(m)) {
+                match = articolo->getAutore().contains(testo, Qt::CaseInsensitive);
+            } else if (auto film = dynamic_cast<Film*>(m)) {
+                match = film->getRegista().contains(testo, Qt::CaseInsensitive);
+            }
+            if (match)
+                risultati.push_back(m);
+        }
+    }
+
+    return risultati;
+}
+

@@ -11,19 +11,16 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // Barra menu di navigazione
     gestioneBtn = new QPushButton("Gestione Media");
-    ricercaBtn = new QPushButton("Ricerca Media");
     prestitiBtn = new QPushButton("Gestione Prestiti");
 
     // Creazione Widget specifici
     mediaWidget = new MediaManagerWidget();
-    searchWidget = new SearchWidget();
     loanWidget = new LoanManagerWidget();
 
     // Creazione QStackedWidget (layer di widget)
     stackedWidget = new QStackedWidget;
     stackedWidget->addWidget(mediaWidget);  // index 0
-    stackedWidget->addWidget(searchWidget); // index 1
-    stackedWidget->addWidget(loanWidget);   // index 2
+    stackedWidget->addWidget(loanWidget);   // index 1
 
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
@@ -31,7 +28,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // Pulsanti in alto (barra di navigazione)
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(gestioneBtn);
-    buttonLayout->addWidget(ricercaBtn);
     buttonLayout->addWidget(prestitiBtn);
 
     // Aggiunta dei layout
@@ -45,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     // Connessione dei pulsanti per cambiare pagina
     connect(gestioneBtn, &QPushButton::clicked, this, &MainWindow::showMediaManager);
-    connect(ricercaBtn, &QPushButton::clicked, this, &MainWindow::showSearchMedia);
     connect(prestitiBtn, &QPushButton::clicked, this, &MainWindow::showLoanManager);
 
     // Imposta pagina iniziale
@@ -58,11 +53,11 @@ void MainWindow::showMediaManager() {
 }
 
 // Esecuzione del SearchWidget
-void MainWindow::showSearchMedia() {
-    stackedWidget->setCurrentIndex(1);
-}
+//void MainWindow::showSearchMedia() {
+//    stackedWidget->setCurrentIndex(1);
+//}
 
 // Esecuzione del LoanManagerWidget
 void MainWindow::showLoanManager() {
-    stackedWidget->setCurrentIndex(2);
+    stackedWidget->setCurrentIndex(1);
 }
