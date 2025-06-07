@@ -2,8 +2,6 @@
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QListWidgetItem>
 
 #include "Project/libro.h"
 #include "Project/film.h"

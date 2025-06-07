@@ -1,14 +1,10 @@
 #include "loanmanagerwidget.h"
-#include "LoanManager/loanviewwidget.h"
+#include "GUI/LoanManager/loanviewwidget.h"
 #include "Project/mediarepo.h"
-//#include "Project/libro.h"
-//#include "Project/film.h"
-//#include "Project/articolo.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QMessageBox>
-#include <QListWidgetItem>
+
 
 LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
     searchWidget = new SearchWidget(this); // Barra di ricerca
@@ -19,7 +15,7 @@ LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
     returnButton = new QPushButton("Restituisci", this);
 
     disponibilitaComboBox = new QComboBox(this);
-    disponibilitaComboBox->addItems({"In prestito", "Disponibili", "Tutti"});
+    disponibilitaComboBox->addItems({"In prestito", "Disponibili", "Tutti", "In ritardo"});
 
     QHBoxLayout* searchLayout = new QHBoxLayout;
     searchLayout->addWidget(disponibilitaComboBox);
@@ -79,7 +75,6 @@ void LoanManagerWidget::addLoan() {
     }
 }
 
-
 Media* LoanManagerWidget::getMediaFromItem(QListWidgetItem* item) {
     if (!item) return nullptr;
     quintptr ptrVal = item->data(Qt::UserRole).value<quintptr>();
@@ -120,9 +115,7 @@ void LoanManagerWidget::onRicercaAvviata(const QString& testo, const QString& cr
     }
 }
 
-
 void LoanManagerWidget::aggiornaRicerca() {
     // Reinvoca la ricerca con i parametri attuali
     onRicercaAvviata(searchWidget->getTestoRicerca(), searchWidget->getCriterioRicerca());
 }
-

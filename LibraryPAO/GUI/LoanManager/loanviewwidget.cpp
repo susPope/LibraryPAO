@@ -3,10 +3,8 @@
 #include "Project/film.h"
 #include "Project/articolo.h"
 
-#include <QFrame>
 #include <QPixmap>
 #include <QSizePolicy>
-#include <QDate>
 #include <QVBoxLayout>
 
 LoanViewWidget::LoanViewWidget(Media* media, QWidget* parent) : QWidget(parent), media(media) {
@@ -47,6 +45,20 @@ LoanViewWidget::LoanViewWidget(Media* media, QWidget* parent) : QWidget(parent),
 
     tipoLabel->setText(tipo);
     dettagliLabel->setText(dettagli);
+
+    // Imposta il colore del titolo in base allo stato
+    QString coloreTitolo;
+    if (media->isInRitardo()) {
+        coloreTitolo = "red";
+    } else if (!media->getDisponibilita()) {
+        coloreTitolo = "orange";
+    } else if (media->getDisponibilita()) {
+        coloreTitolo = "green";
+    } else {
+        // default
+    }
+
+    titoloLabel->setStyleSheet(QString("color: %1; border: none;").arg(coloreTitolo));
 
     QString stato = media->getDisponibilita()
                         ? "✅ Disponibile"
@@ -107,6 +119,20 @@ void LoanViewWidget::aggiorna() {
     tipoLabel->setText(tipo);
     dettagliLabel->setText(dettagli);
 
+    // Imposta il colore del titolo in base allo stato
+    QString coloreTitolo;
+    if (media->isInRitardo()) {
+        coloreTitolo = "red";
+    } else if (!media->getDisponibilita()) {
+        coloreTitolo = "orange";
+    } else if (media->getDisponibilita()) {
+        coloreTitolo = "green";
+    } else {
+        // default
+    }
+
+    titoloLabel->setStyleSheet(QString("color: %1; border: none;").arg(coloreTitolo));
+
     QString stato = media->getDisponibilita()
                         ? "✅ Disponibile"
                         : QString("❌ Non disponibile • Prossima: %1").arg(media->getProssimaDisponibilita().toString("dd/MM/yyyy"));
@@ -116,5 +142,3 @@ void LoanViewWidget::aggiorna() {
             .arg(media->getNprestiti())
         );
 }
-
-

@@ -1,5 +1,18 @@
 {
     "articoli": [
+        {
+            "anno": 2025,
+            "autore": "WERWER",
+            "disponibile": true,
+            "genere": "WERWER",
+            "id": "ART-EREWR-WERWER-0",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-07",
+            "rivista": "WERW",
+            "titolo": "EREWR",
+            "volume": 1
+        }
     ],
     "film": [
         {
@@ -14,12 +27,12 @@
                 "wq",
                 "e"
             ],
-            "disponibile": true,
+            "disponibile": false,
             "durata": 1,
             "genere": "wewweqq",
             "id": "FIL-PLISCO-QWEQWE-0",
-            "nprestiti": 3,
-            "proxDisp": "2025-06-07",
+            "nprestiti": 5,
+            "proxDisp": "2025-06-14",
             "regista": "qweqwe",
             "tipo": "Libro",
             "titolo": "plisco"
@@ -32,13 +45,13 @@
             "disponibile": false,
             "editore": "qweqweq",
             "genere": "wqeqweqwe",
-            "id": "LIB-POLLO-QWEQWE-0",
+            "id": "LIB-POLLO1-QWEQWE-1",
             "isbn": "1234567890",
-            "nprestiti": 6,
+            "nprestiti": 8,
             "pagine": 1,
-            "proxDisp": "2025-07-07",
+            "proxDisp": "2025-05-07",
             "tipo": "Libro",
-            "titolo": "pollo"
+            "titolo": "pollo1"
         },
         {
             "anno": 2025,
@@ -46,27 +59,83 @@
             "disponibile": true,
             "editore": "qweqwe",
             "genere": "qeqwe",
-            "id": "LIB-POLIPO12-QWEQW-2",
+            "id": "LIB-POLIPO123-QWEQW-0",
             "isbn": "1234567889",
             "nprestiti": 3,
             "pagine": 1,
             "proxDisp": "2025-06-07",
             "tipo": "Libro",
-            "titolo": "polipo12"
+            "titolo": "polipo123"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": false,
+            "editore": "qweqweqw",
+            "genere": "qweqweqweqwe",
+            "id": "LIB-QWEQWE-QWEQWE-0",
+            "isbn": "1234567899",
+            "nprestiti": 2,
+            "pagine": 1,
+            "proxDisp": "2025-07-07",
+            "tipo": "Libro",
+            "titolo": "qweqwe"
         },
         {
             "anno": 2025,
             "autore": "qweqwe",
             "disponibile": true,
-            "editore": "qweqweqw",
-            "genere": "qweqweqweqwe",
-            "id": "LIB-QWEQWE-QWEQWE-0",
-            "isbn": "1234567899",
+            "editore": "qweqweq",
+            "genere": "wqeqweqwe",
+            "id": "LIB-POLLO123-QWEQWE-0",
+            "isbn": "1234567890",
             "nprestiti": 0,
             "pagine": 1,
-            "proxDisp": "2025-06-05",
+            "proxDisp": "2025-06-07",
             "tipo": "Libro",
-            "titolo": "qweqwe"
+            "titolo": "pollo123"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": true,
+            "editore": "qweqweq",
+            "genere": "wqeqweqwe",
+            "id": "LIB-POLLO123-QWEQWE-2",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-07",
+            "tipo": "Libro",
+            "titolo": "pollo123"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": true,
+            "editore": "qweqweq",
+            "genere": "wqeqweqwe",
+            "id": "LIB-POLLO123-QWEQWE-3",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-07",
+            "tipo": "Libro",
+            "titolo": "pollo123"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": true,
+            "editore": "qweqweq",
+            "genere": "wqeqweqwe",
+            "id": "LIB-POLLO123-QWEQWE-4",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-07",
+            "tipo": "Libro",
+            "titolo": "pollo123"
         }
     ]
 }

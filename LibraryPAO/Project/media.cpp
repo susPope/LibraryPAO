@@ -57,3 +57,15 @@ void Media::setProssimaDisponibilita(const QDate& nuovaproxdisponibilita) {
         qWarning() << "Data di disponibilità non valida";
     }
 }
+
+bool Media::isInRitardo() const {
+    if (getDisponibilita()) {
+        // Se il media è disponibile (non in prestito), non è in ritardo
+        return false;
+    }
+
+    QDate oggi = QDate::currentDate();
+
+    // Se oggi è dopo la data di scadenza, è in ritardo
+    return oggi > getProssimaDisponibilita();
+}

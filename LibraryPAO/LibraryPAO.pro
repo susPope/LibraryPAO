@@ -1,43 +1,40 @@
-QT       += core gui
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-# Sources - usa solo percorsi corretti e rimuovi duplicati
+# Sources
 SOURCES += \
-    GUI/LoanManager/loanviewwidget.cpp \
-    GUI/MediaManager/mediaviewwidget.cpp \
-    GUI/loanmanagerwidget.cpp \
-    GUI/mediaformwidget.cpp \
-    GUI/mediamanagerwidget.cpp \
-    Project/mediarepo.cpp \
     main.cpp \
-    GUI/mainwindow.cpp \
-    GUI/searchwidget.cpp \
+    Project/media.cpp \
     Project/articolo.cpp \
     Project/film.cpp \
     Project/libro.cpp \
-    Project/media.cpp
+    Project/mediarepo.cpp \
+    GUI/mainwindow.cpp \
+    GUI/MediaManager/mediaviewwidget.cpp \
+    GUI/MediaManager/mediaformwidget.cpp \
+    GUI/MediaManager/mediamanagerwidget.cpp \
+    GUI/LoanManager/loanviewwidget.cpp \
+    GUI/LoanManager/loanmanagerwidget.cpp \
+    GUI/SearchBar/searchwidget.cpp
+
 
 # Headers - solo percorsi esistenti
 HEADERS += \
-    GUI/LoanManager/loanviewwidget.h \
-    GUI/MediaManager/mediaviewwidget.h \
-    GUI/loanmanagerwidget.h \
-    GUI/mainwindow.h \
-    GUI/mediaformwidget.h \
-    GUI/mediamanagerwidget.h \
-    GUI/searchwidget.h \
+    Project/media.h \
     Project/articolo.h \
     Project/film.h \
     Project/libro.h \
-    Project/media.h \
-    Project/mediarepo.h
+    Project/mediarepo.h \
+    GUI/mainwindow.h \
+    GUI/MediaManager/mediaviewwidget.h \
+    GUI/MediaManager/mediaformwidget.h \
+    GUI/MediaManager/mediamanagerwidget.h \
+    GUI/LoanManager/loanviewwidget.h \
+    GUI/LoanManager/loanmanagerwidget.h \
+    GUI/SearchBar/searchwidget.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

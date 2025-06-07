@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QListWidgetItem>
 #include "Project/media.h"
-#include "searchwidget.h"
+#include "GUI/SearchBar/searchwidget.h"
 
 class QListWidget;
 class QPushButton;
@@ -14,12 +14,12 @@ class LoanManagerWidget : public QWidget {
 
 public:
     explicit LoanManagerWidget(QWidget *parent = nullptr);
+    void aggiornaRicerca();
 
 private slots:
     void addLoan();
     void returnLoan();
     void onRicercaAvviata(const QString& testo, const QString& criterio);
-    void aggiornaRicerca();
 
 private:
     QListWidget *loanList;

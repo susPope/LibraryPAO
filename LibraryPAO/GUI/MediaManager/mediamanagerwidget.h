@@ -2,7 +2,7 @@
 #define MANAGEMEDIAWIDGET_H
 
 #include "mediaformwidget.h"
-#include "searchwidget.h"
+#include "GUI/SearchBar/searchwidget.h"
 #include <QWidget>
 #include <QListWidgetItem>
 
@@ -15,6 +15,7 @@ class MediaManagerWidget : public QWidget
 
 public:
     explicit MediaManagerWidget(QWidget *parent = nullptr);
+    //void aggiornaRicerca();
 
 private slots:
     void addMedia();

@@ -1,14 +1,13 @@
+#include "mediamanagerwidget.h"
 #include "Project/media.h"
 #include "Project/libro.h"
 #include "Project/film.h"
 #include "Project/articolo.h"
-#include "mediamanagerwidget.h"
-#include "MediaManager/mediaviewwidget.h"
 #include "Project/mediarepo.h"
+#include "GUI/MediaManager/mediaviewwidget.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QListWidget>
-#include <QPushButton>
 #include <QMessageBox>
 
 MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
@@ -191,6 +190,9 @@ void MediaManagerWidget::onRicercaAvviata(const QString& testo, const QString& c
         mediaList->setItemWidget(item, widget);
         item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
     }
-
 }
 
+//void MediaManagerWidget::aggiornaRicerca() {
+//    // Reinvoca la ricerca con i parametri attuali
+//    onRicercaAvviata(searchWidget->getTestoRicerca(), searchWidget->getCriterioRicerca());
+//}

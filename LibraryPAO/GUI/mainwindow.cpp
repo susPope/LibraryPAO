@@ -1,12 +1,9 @@
 #include "mainwindow.h"
-#include "mediamanagerwidget.h"
-#include "searchwidget.h"
-#include "loanmanagerwidget.h"
+#include "GUI/MediaManager/mediamanagerwidget.h"
+#include "GUI/LoanManager/loanmanagerwidget.h"
 
-#include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QStackedWidget>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // Barra menu di navigazione
@@ -49,15 +46,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 // Esecuzione del MediaManagerWidget
 void MainWindow::showMediaManager() {
+    //mediaWidget->aggiornaRicerca();
     stackedWidget->setCurrentIndex(0);
 }
 
-// Esecuzione del SearchWidget
-//void MainWindow::showSearchMedia() {
-//    stackedWidget->setCurrentIndex(1);
-//}
-
 // Esecuzione del LoanManagerWidget
 void MainWindow::showLoanManager() {
+    loanWidget->aggiornaRicerca();
     stackedWidget->setCurrentIndex(1);
 }

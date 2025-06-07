@@ -30,6 +30,8 @@ public:
     // Metodo polimorfo #3: Creazione widget UI
     //virtual QWidget* createDetailsWidget(QWidget* parent = nullptr) const = 0;
 
+    bool isInRitardo() const;
+
     // GETTER
     QString getTitolo() const { return titolo; }
     QString getGenere() const { return genere; }

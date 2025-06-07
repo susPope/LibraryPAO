@@ -1,12 +1,13 @@
+#include "mediarepo.h"
+#include "libro.h"
+#include "film.h"
+#include "articolo.h"
+
 #include <QFile>
 #include <QJsonDocument>
 #include <QDebug>
 #include <QDate>
 #include <algorithm>    // per std::remove_if
-#include "mediarepo.h"
-#include "libro.h"
-#include "film.h"
-#include "articolo.h"
 
 MediaRepo::MediaRepo() {
     svuota();
@@ -169,6 +170,8 @@ int MediaRepo::countMedia(Media* media) {
     int maxCount = -1;
 
     for (const auto& mediaPtr : mediaList) {
+        if (mediaPtr.get() == media) continue;
+
         QString id = mediaPtr->getId();
 
         if (tipo == "Libro") {
@@ -273,10 +276,12 @@ std::vector<Media*> MediaRepo::cercaPrestiti(const QString& testo, const QString
     for (const auto& mediaPtr : mediaList) {
         Media* m = mediaPtr.get();
 
-        // Filtro disponibilità
+        // Filtro disponibilità e ritardo
         if (filtroDisponibilita == "In prestito" && m->getDisponibilita())
             continue;
         else if (filtroDisponibilita == "Disponibili" && !m->getDisponibilita())
+            continue;
+        else if (filtroDisponibilita == "In ritardo" && !m->isInRitardo()) // <- aggiunto controllo ritardo
             continue;
         // Se "Tutti", non filtriamo
 
@@ -301,4 +306,3 @@ std::vector<Media*> MediaRepo::cercaPrestiti(const QString& testo, const QString
 
     return risultati;
 }
-

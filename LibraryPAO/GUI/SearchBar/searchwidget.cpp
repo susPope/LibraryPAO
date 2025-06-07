@@ -7,6 +7,7 @@ SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
 
     searchEdit = new QLineEdit(this);
     searchEdit->setPlaceholderText("Cerca...");
+    searchEdit->setStyleSheet("QLineEdit { color: white; background-color: #333; } QLineEdit::placeholder { color: gray; }");
 
     searchButton = new QPushButton("🔍 Cerca", this);
     searchButton->setToolTip("Avvia la ricerca");
