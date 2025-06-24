@@ -9,6 +9,11 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
 MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     mediaList = new QListWidget(this);
@@ -18,12 +23,14 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     addButton = new QPushButton("Aggiungi", this);
     editButton = new QPushButton("Modifica", this);
     deleteButton = new QPushButton("Elimina", this);
+    importDBButton = new QPushButton("Importa DataBase", this);
     deleteDBButton = new QPushButton("Elimina DataBase", this);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(addButton);
     buttonLayout->addWidget(editButton);
     buttonLayout->addWidget(deleteButton);
+    buttonLayout->addWidget(importDBButton);
     buttonLayout->addWidget(deleteDBButton);
 
     searchWidget = new SearchWidget(this); // Barra di ricerca
@@ -56,6 +63,7 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     connect(addButton, SIGNAL(clicked()), this, SLOT(addMedia()));
     connect(editButton, SIGNAL(clicked()), this, SLOT(editSelectedMedia()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteSelectedMedia()));
+    connect(importDBButton, SIGNAL(clicked()), this, SLOT(importDB()));
     connect(deleteDBButton, SIGNAL(clicked()), this, SLOT(deleteAllMedia()));
     connect(mediaList, &QListWidget::itemClicked, this, &MediaManagerWidget::populateFormFromSelected);
     connect(searchWidget, &SearchWidget::ricercaAvviata, this, &MediaManagerWidget::onRicercaAvviata);
@@ -148,6 +156,34 @@ void MediaManagerWidget::deleteSelectedMedia() {
     } else {
         QMessageBox::warning(this, "Elimina", "Seleziona un media da eliminare.");
     }
+}
+
+void MediaManagerWidget::importDB() {
+    //codice per aprire la comunicazione con il so e richiedere l'importazione di un json
+    QString fileName = QFileDialog::getOpenFileName(this, "Importa Database", "", "File JSON (*.json)");
+    if (fileName.isEmpty())
+        return;
+
+    // Imposta il nuovo path nel MediaRepo
+    MediaRepo::instance().setPath(fileName);
+    mediaForm->pulisciCampi();
+    mediaList->clear();  // svuota la lista visuale
+    MediaRepo::instance().importaDB();
+
+    const auto& tuttiIMedia = MediaRepo::instance().getTuttiIMedia();
+    for (const auto& ptr : tuttiIMedia) {
+        Media* m = ptr.get();
+
+        QListWidgetItem* item = new QListWidgetItem();
+        MediaViewWidget* widget = new MediaViewWidget(m);
+        item->setSizeHint(widget->sizeHint());
+        mediaList->addItem(item);
+        mediaList->setItemWidget(item, widget);
+        item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
+    }
+
+    QMessageBox::information(this, "Importazione completata", "Tutti i media sono stati importati.");
+
 }
 
 void MediaManagerWidget::deleteAllMedia() {

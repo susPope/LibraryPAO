@@ -56,6 +56,12 @@ const std::vector<std::unique_ptr<Media>>& MediaRepo::getTuttiIMedia() const {
     return mediaList;
 }
 
+void MediaRepo::importaDB() {
+    svuota();
+    caricaDaJson();
+    qInfo() << "DataBase importato";
+}
+
 void MediaRepo::svuotaDB() {
     svuota();
     salvaSuJson();
@@ -145,7 +151,7 @@ bool MediaRepo::checkLibro(const QString& isbn) {
     return (len == 10 || len == 13);
 }
 
-// Cerca l'ultimo numero di disambiguità negli id con titoloe autore uguali per creare un id univoco
+// Cerca l'ultimo numero di disambiguità negli id con titolo e autore uguali per creare un id univoco
 int MediaRepo::countMedia(Media* media) {
     if (!media) return 0;
 
@@ -305,4 +311,13 @@ std::vector<Media*> MediaRepo::cercaPrestiti(const QString& testo, const QString
     }
 
     return risultati;
+}
+
+bool MediaRepo::setPath(const QString& nuovaPath) {
+    if(path.isEmpty()) {
+        qWarning() << "Nuova PATH non valida";
+        return false;
+    }
+    path = nuovaPath;
+    return true;
 }

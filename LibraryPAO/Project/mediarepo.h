@@ -9,6 +9,17 @@
 #include "media.h"
 
 class MediaRepo {
+private:
+    MediaRepo(); // Costruttore privato per singleton
+    ~MediaRepo();
+
+    std::vector<std::unique_ptr<Media>> mediaList;
+    QString path = QCoreApplication::applicationDirPath() + "/../../Database/libraryDB.json";
+
+    // Gestione JSON
+    void salvaSuJson();
+    void caricaDaJson();
+
 public:
     static MediaRepo& instance(); // Singleton
 
@@ -16,6 +27,7 @@ public:
     void aggiungiMedia(std::unique_ptr<Media> m);
     void aggiornaMedia(Media* m);
     bool rimuoviMedia(Media* m);
+    void importaDB();
     void svuotaDB();
     const std::vector<std::unique_ptr<Media>>& getTuttiIMedia() const;
 
@@ -33,16 +45,7 @@ public:
     void aggiungiPrestito(Media* m);
     void restituisciPrestito(Media* m);
 
-private:
-    MediaRepo(); // Costruttore privato per singleton
-    ~MediaRepo();
-
-    std::vector<std::unique_ptr<Media>> mediaList;
-    const QString path = QCoreApplication::applicationDirPath() + "/../../Database/libraryDB.json";
-
-    // Gestione JSON
-    void salvaSuJson();
-    void caricaDaJson();
+    bool setPath(const QString& nuovaPath);
 };
 
 #endif // MEDIAREPOSITORY_H

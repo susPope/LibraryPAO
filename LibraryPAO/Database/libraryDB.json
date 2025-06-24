@@ -56,14 +56,14 @@
         {
             "anno": 2025,
             "autore": "qweqw",
-            "disponibile": true,
+            "disponibile": false,
             "editore": "qweqwe",
             "genere": "qeqwe",
             "id": "LIB-POLIPO123-QWEQW-0",
             "isbn": "1234567889",
-            "nprestiti": 3,
+            "nprestiti": 4,
             "pagine": 1,
-            "proxDisp": "2025-06-07",
+            "proxDisp": "2025-07-24",
             "tipo": "Libro",
             "titolo": "polipo123"
         },
@@ -136,6 +136,20 @@
             "proxDisp": "2025-06-07",
             "tipo": "Libro",
             "titolo": "pollo123"
+        },
+        {
+            "anno": 2025,
+            "autore": "dsds",
+            "disponibile": true,
+            "editore": "dsds",
+            "genere": "ssdsd",
+            "id": "LIB-DSDSD-DSDS-0",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-24",
+            "tipo": "Libro",
+            "titolo": "dsdsd"
         }
     ]
 }

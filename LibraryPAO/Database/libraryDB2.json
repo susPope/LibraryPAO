@@ -1,0 +1,57 @@
+{
+    "articoli": [
+        {
+            "anno": 2025,
+            "autore": "WERWER",
+            "disponibile": true,
+            "genere": "WERWER",
+            "id": "ART-EREWR-WERWER-0",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-07",
+            "rivista": "WERW",
+            "titolo": "EREWR",
+            "volume": 1
+        }
+    ],
+    "film": [
+        {
+            "anno": 2025,
+            "cast": [
+                "qweqwe",
+                "qwe",
+                "wqe",
+                "qw",
+                "e",
+                "qwe",
+                "wq",
+                "e"
+            ],
+            "disponibile": false,
+            "durata": 1,
+            "genere": "wewweqq",
+            "id": "FIL-PLISCO-QWEQWE-0",
+            "nprestiti": 5,
+            "proxDisp": "2025-06-14",
+            "regista": "qweqwe",
+            "tipo": "Libro",
+            "titolo": "plisco"
+        }
+    ],
+    "libri": [
+        {
+            "anno": 2025,
+            "autore": "dsds",
+            "disponibile": true,
+            "editore": "dsds",
+            "genere": "ssdsd",
+            "id": "LIB-DSDSD-DSDS-0",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-24",
+            "tipo": "Libro",
+            "titolo": "dsdsd"
+        }
+    ]
+}

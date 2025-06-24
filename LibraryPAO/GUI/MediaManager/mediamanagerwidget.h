@@ -21,6 +21,7 @@ private slots:
     void addMedia();
     void editSelectedMedia();
     void deleteSelectedMedia();
+    void importDB();
     void deleteAllMedia();
     void populateFormFromSelected(QListWidgetItem* item);
     void onRicercaAvviata(const QString& testo, const QString& criterio);
@@ -31,6 +32,7 @@ private:
     QPushButton *addButton;
     QPushButton *editButton;
     QPushButton *deleteButton;
+    QPushButton *importDBButton;
     QPushButton *deleteDBButton;
     MediaFormWidget* mediaForm;
     SearchWidget* searchWidget;
