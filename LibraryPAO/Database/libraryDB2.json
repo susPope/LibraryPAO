@@ -2,56 +2,116 @@
     "articoli": [
         {
             "anno": 2025,
-            "autore": "WERWER",
+            "autore": "Giorgio Manzi",
             "disponibile": true,
-            "genere": "WERWER",
-            "id": "ART-EREWR-WERWER-0",
+            "genere": "Antropologia",
+            "id": "ART-LALUNGAINFANZIAUMANA-GIORGIOMANZI-0",
             "nprestiti": 0,
-            "pagine": 1,
-            "proxDisp": "2025-06-07",
-            "rivista": "WERW",
-            "titolo": "EREWR",
-            "volume": 1
+            "pagine": 30,
+            "proxDisp": "2025-06-25",
+            "rivista": "Le Scienze",
+            "titolo": "La lunga infanzia umana",
+            "volume": 667
         }
     ],
     "film": [
         {
-            "anno": 2025,
+            "anno": 1997,
             "cast": [
-                "qweqwe",
-                "qwe",
-                "wqe",
-                "qw",
-                "e",
-                "qwe",
-                "wq",
-                "e"
+                "Leonardo DiCaprio",
+                "Kate Winslet",
+                "Billy Zane",
+                "Kathy Bates"
+            ],
+            "disponibile": true,
+            "durata": 195,
+            "genere": "Drammatico / Romantico",
+            "id": "FIL-TITANIC-JAMESCAMERON-0",
+            "nprestiti": 0,
+            "proxDisp": "2025-06-25",
+            "regista": "James Cameron",
+            "tipo": "Libro",
+            "titolo": "Titanic"
+        },
+        {
+            "anno": 1994,
+            "cast": [
+                "Christian Bale",
+                "Heath Ledger",
+                "Aaron Eckhart",
+                "Michael Caine"
             ],
             "disponibile": false,
-            "durata": 1,
-            "genere": "wewweqq",
-            "id": "FIL-PLISCO-QWEQWE-0",
-            "nprestiti": 5,
-            "proxDisp": "2025-06-14",
-            "regista": "qweqwe",
+            "durata": 142,
+            "genere": "Drammatico / Commedia",
+            "id": "FIL-FORRESTGUMP-ROBERTZEMECKIS-0",
+            "nprestiti": 1,
+            "proxDisp": "2025-07-02",
+            "regista": "Robert Zemeckis",
             "tipo": "Libro",
-            "titolo": "plisco"
+            "titolo": "Forrest Gump"
+        },
+        {
+            "anno": 2000,
+            "cast": [
+                "Russell Crowe",
+                "Joaquin Phoenix",
+                "Connie Nielsen",
+                "Oliver Reed"
+            ],
+            "disponibile": true,
+            "durata": 155,
+            "genere": "Storico / Azione",
+            "id": "FIL-ILGLADIATORE-RIDLEYSCOTT-0",
+            "nprestiti": 0,
+            "proxDisp": "2025-06-25",
+            "regista": "Ridley Scott",
+            "tipo": "Libro",
+            "titolo": "Il gladiatore"
         }
     ],
     "libri": [
         {
-            "anno": 2025,
-            "autore": "dsds",
-            "disponibile": true,
-            "editore": "dsds",
-            "genere": "ssdsd",
-            "id": "LIB-DSDSD-DSDS-0",
-            "isbn": "1234567890",
-            "nprestiti": 0,
-            "pagine": 1,
-            "proxDisp": "2025-06-24",
+            "anno": 1954,
+            "autore": "J.R.R. Tolkien",
+            "disponibile": false,
+            "editore": "Allen & Unwin",
+            "genere": "Fantasy",
+            "id": "LIB-THELORDOFTHERINGS-J.R.R.TOLKIEN-0",
+            "isbn": "9780261102385",
+            "nprestiti": 1,
+            "pagine": 1178,
+            "proxDisp": "2025-05-25",
             "tipo": "Libro",
-            "titolo": "dsdsd"
+            "titolo": "The Lord of the Rings"
+        },
+        {
+            "anno": 1980,
+            "autore": "Umberto Eco",
+            "disponibile": false,
+            "editore": "Bompiani",
+            "genere": "Giallo storico",
+            "id": "LIB-ILNOMEDELLAROSA-UMBERTOECO-0",
+            "isbn": "9788845248946",
+            "nprestiti": 2,
+            "pagine": 512,
+            "proxDisp": "2025-07-26",
+            "tipo": "Libro",
+            "titolo": "Il nome della rosa"
+        },
+        {
+            "anno": 2001,
+            "autore": "Niccolò Ammaniti",
+            "disponibile": true,
+            "editore": "Einaudi",
+            "genere": "Thriller psicologico",
+            "id": "LIB-IONONHOPAURA-NICCOLÒAMMANITI-0",
+            "isbn": "9788806175192",
+            "nprestiti": 0,
+            "pagine": 304,
+            "proxDisp": "2025-06-25",
+            "tipo": "Libro",
+            "titolo": "Io non ho paura"
         }
     ]
 }

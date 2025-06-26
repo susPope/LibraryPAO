@@ -4,7 +4,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
-
+#include <QShortcut>
+#include <QKeySequence>
 
 LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
     searchWidget = new SearchWidget(this); // Barra di ricerca
@@ -51,6 +52,14 @@ LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
         item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
     }
 
+    // Shortcut per addLoan: Ctrl + P
+    QShortcut* shortcutAdd = new QShortcut(QKeySequence("Ctrl+P"), this);
+    connect(shortcutAdd, &QShortcut::activated, this, &LoanManagerWidget::addLoan);
+
+    // Shortcut per returnLoan: Ctrl + R
+    QShortcut* shortcutEdit = new QShortcut(QKeySequence("Ctrl+R"), this);
+    connect(shortcutEdit, &QShortcut::activated, this, &LoanManagerWidget::returnLoan);
+
     connect(addButton, &QPushButton::clicked, this, &LoanManagerWidget::addLoan);
     connect(returnButton, &QPushButton::clicked, this, &LoanManagerWidget::returnLoan);
     connect(searchWidget, &SearchWidget::ricercaAvviata, this, &LoanManagerWidget::onRicercaAvviata);
@@ -60,14 +69,17 @@ LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
 void LoanManagerWidget::addLoan() {
     QListWidgetItem *item = loanList->currentItem();
     if (!item) {
-        QMessageBox::warning(this, "Modifica", "Seleziona un media da modificare.");
+        QMessageBox::warning(this, "Modifica", "Seleziona un media da prestare.");
         return;
     }
 
     Media* media = getMediaFromItem(item);
     if (!media) return;
 
-    MediaRepo::instance().aggiungiPrestito(media);
+    QString errore = MediaRepo::instance().aggiungiPrestito(media);
+    if (!errore.isEmpty()) {
+        QMessageBox::critical(this, "Errore durante il prestito", errore);
+    }
 
     LoanViewWidget* view = qobject_cast<LoanViewWidget*>(loanList->itemWidget(item));
     if (view) {
@@ -91,7 +103,10 @@ void LoanManagerWidget::returnLoan() {
     Media* media = getMediaFromItem(item);
     if (!media) return;
 
-    MediaRepo::instance().restituisciPrestito(media);
+    QString errore = MediaRepo::instance().restituisciPrestito(media);
+    if (!errore.isEmpty()) {
+        QMessageBox::critical(this, "Errore durante la restituzione", errore);
+    }
 
     LoanViewWidget* view = qobject_cast<LoanViewWidget*>(loanList->itemWidget(item));
     if (view) {

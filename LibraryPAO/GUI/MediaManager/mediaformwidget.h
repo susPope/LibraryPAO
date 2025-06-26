@@ -25,7 +25,7 @@ public:
 
     // Metodi per il modifica Media (editMedia())
     void caricaMedia(Media* media);
-    bool aggiornaMedia(Media* media);
+    QString aggiornaMedia(Media* media);
     QString getTipoSelezionato();
 
 private:

@@ -14,21 +14,22 @@ private:
     ~MediaRepo();
 
     std::vector<std::unique_ptr<Media>> mediaList;
-    QString path = QCoreApplication::applicationDirPath() + "/../../Database/libraryDB.json";
+    QString path = QCoreApplication::applicationDirPath() + "/../../Database/libraryDB.json"; //path default
 
     // Gestione JSON
-    void salvaSuJson();
-    void caricaDaJson();
+    QString salvaSuJson();
+    QString caricaDaJson();
+    QString checkScrivibilitaFile() const;
 
 public:
     static MediaRepo& instance(); // Singleton
 
     // Gestione RAM
-    void aggiungiMedia(std::unique_ptr<Media> m);
-    void aggiornaMedia(Media* m);
-    bool rimuoviMedia(Media* m);
-    void importaDB();
-    void svuotaDB();
+    QString aggiungiMedia(std::unique_ptr<Media> m);
+    QString aggiornaMedia(Media* m);
+    QString rimuoviMedia(Media* m);
+    QString importaDB();
+    QString svuotaDB();
     const std::vector<std::unique_ptr<Media>>& getTuttiIMedia() const;
 
     // Controlli per l'inserimento e la modifica
@@ -42,8 +43,8 @@ public:
     std::vector<Media*> cercaPrestiti(const QString& testo, const QString& criterio, const QString& filtroDisponibilità);
 
     //Gestione Prestiti
-    void aggiungiPrestito(Media* m);
-    void restituisciPrestito(Media* m);
+    QString aggiungiPrestito(Media* m);
+    QString restituisciPrestito(Media* m);
 
     bool setPath(const QString& nuovaPath);
 };

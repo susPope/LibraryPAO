@@ -25,7 +25,7 @@ private slots:
     void deleteAllMedia();
     void populateFormFromSelected(QListWidgetItem* item);
     void onRicercaAvviata(const QString& testo, const QString& criterio);
-
+    void cleanFields();
 
 private:
     QListWidget *mediaList;
@@ -36,6 +36,7 @@ private:
     QPushButton *deleteDBButton;
     MediaFormWidget* mediaForm;
     SearchWidget* searchWidget;
+    QPushButton *cleanFieldsButton;
 
     Media* getMediaFromItem(QListWidgetItem* item);
 };

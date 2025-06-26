@@ -2,6 +2,7 @@
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 #include "Project/libro.h"
 #include "Project/film.h"
@@ -105,34 +106,60 @@ QWidget* MediaFormWidget::creaFormArticolo() {
 }
 
 std::unique_ptr<Media> MediaFormWidget::creaMedia() const {
-    QStringList list;
+    auto isEmpty = [](const QString& s) { return s.trimmed().isEmpty(); };
 
     switch (tipoGroup->checkedId()) {
-    case 0:
-        if(MediaRepo::instance().checkLibro(isbn->text())) {
-            QString cleanIsbn = isbn->text().remove(' ').remove('-');
+    case 0: { // Libro
+        if (isEmpty(titolo->text()) || isEmpty(genere->text()) ||
+            isEmpty(autoreLib->text()) || isEmpty(editore->text()) ||
+            isEmpty(isbn->text()))
+        {
+            QMessageBox::warning(nullptr, "Errore", "Compila tutti i campi del libro.");
+            return nullptr;
+        }
+        if (!MediaRepo::instance().checkLibro(isbn->text())) {
+            QMessageBox::warning(nullptr, "Errore", "ISBN non valido o già presente.");
+            return nullptr;
+        }
 
-            return std::make_unique<Libro>(
-                titolo->text(), genere->text(), anno->value(),
-                autoreLib->text(), editore->text(), pagineLib->value(), cleanIsbn);
+        QString cleanIsbn = isbn->text().remove(' ').remove('-');
+
+        return std::make_unique<Libro>(
+            titolo->text(), genere->text(), anno->value(),
+            autoreLib->text(), editore->text(), pagineLib->value(), cleanIsbn);
+    }
+    case 1: { // Film
+        if (isEmpty(titolo->text()) || isEmpty(genere->text()) ||
+            isEmpty(regista->text()) || isEmpty(cast->toPlainText()))
+        {
+            QMessageBox::warning(nullptr, "Errore", "Compila tutti i campi del film.");
+            return nullptr;
         }
-        return nullptr;
-    case 1:
-        list = cast->toPlainText().split(",", Qt::SkipEmptyParts);
-        for (QString &item : list) {
+        QStringList list = cast->toPlainText().split(",", Qt::SkipEmptyParts);
+        for (QString& item : list)
             item = item.trimmed();
-        }
+
         return std::make_unique<Film>(
             titolo->text(), genere->text(), anno->value(),
             regista->text(), durata->value(), list);
-    case 2:
+    }
+    case 2: { // Articolo
+        if (isEmpty(titolo->text()) || isEmpty(genere->text()) ||
+            isEmpty(autoreArt->text()) || isEmpty(rivista->text()))
+        {
+            QMessageBox::warning(nullptr, "Errore", "Compila tutti i campi dell'articolo.");
+            return nullptr;
+        }
         return std::make_unique<Articolo>(
             titolo->text(), genere->text(), anno->value(),
             autoreArt->text(), rivista->text(), volume->value(), pagineArt->value());
+    }
     default:
+        QMessageBox::warning(nullptr, "Errore", "Tipo di media non selezionato.");
         return nullptr;
     }
 }
+
 
 void MediaFormWidget::caricaMedia(Media* media) {
     if (!media) return;
@@ -167,10 +194,55 @@ void MediaFormWidget::caricaMedia(Media* media) {
     }
 }
 
-bool MediaFormWidget::aggiornaMedia(Media* media) {
-    if (!media) return false;
+QString MediaFormWidget::aggiornaMedia(Media* media) {
+    if (!media) return "Media non riconosciuto.";
 
-    // Campi comuni
+    // Campi comuni obbligatori
+    if (titolo->text().isEmpty() || genere->text().isEmpty()) {
+        return "Compila tutti i campi comuni: titolo e genere.";
+    }
+
+    if (Libro* l = dynamic_cast<Libro*>(media)) {
+        // Controlli specifici Libro
+        if (autoreLib->text().isEmpty() || editore->text().isEmpty() || isbn->text().isEmpty()) {
+            return "Compila tutti i campi del libro.";
+        }
+        if (!MediaRepo::instance().checkLibro(isbn->text())) {
+            return "ISBN non valido o già presente.";
+        }
+
+        QString cleanIsbn = isbn->text().remove(' ').remove('-');
+        l->setAutore(autoreLib->text());
+        l->setEditore(editore->text());
+        l->setPagine(pagineLib->value());
+        l->setIsbn(cleanIsbn);
+    } else if (Film* f = dynamic_cast<Film*>(media)) {
+        // Controlli specifici Film
+        if (regista->text().isEmpty() || cast->toPlainText().isEmpty()) {
+            return "Compila tutti i campi del film.";
+        }
+
+        f->setRegista(regista->text());
+        f->setDurata(durata->value());
+
+        QStringList list = cast->toPlainText().split(",", Qt::SkipEmptyParts);
+        for (QString& s : list) s = s.trimmed();
+        f->setCast(list);
+    } else if (Articolo* a = dynamic_cast<Articolo*>(media)) {
+        // Controlli specifici Articolo
+        if (autoreArt->text().isEmpty() || rivista->text().isEmpty()) {
+            return "Compila tutti i campi dell'articolo.";
+        }
+
+        a->setAutore(autoreArt->text());
+        a->setRivista(rivista->text());
+        a->setVolume(volume->value());
+        a->setPagine(pagineArt->value());
+    } else {
+        // Tipo di media sconosciuto
+        return "Tipo media sconosciuto.";
+    }
+
     media->setTitolo(titolo->text());
     media->setGenere(genere->text());
     media->setAnno(anno->value());
@@ -179,31 +251,9 @@ bool MediaFormWidget::aggiornaMedia(Media* media) {
     int count = MediaRepo::instance().countMedia(media);
     media->setId(media->generaId(count));
 
-    if (Libro* l = dynamic_cast<Libro*>(media)) {
-        if(MediaRepo::instance().checkLibro(isbn->text())) {
-            QString cleanIsbn = isbn->text().remove(' ').remove('-');
-            l->setAutore(autoreLib->text());
-            l->setEditore(editore->text());
-            l->setPagine(pagineLib->value());
-            l->setIsbn(cleanIsbn);
-        }
-    } else if (Film* f = dynamic_cast<Film*>(media)) {
-        f->setRegista(regista->text());
-        f->setDurata(durata->value());
-        QStringList list = cast->toPlainText().split(",", Qt::SkipEmptyParts);
-        for (QString& s : list) s = s.trimmed();
-        f->setCast(list);
-    } else if (Articolo* a = dynamic_cast<Articolo*>(media)) {
-        a->setAutore(autoreArt->text());
-        a->setRivista(rivista->text());
-        a->setVolume(volume->value());
-        a->setPagine(pagineArt->value());
-    } else {
-        return false;
-    }
-
-    return true;
+    return "";
 }
+
 
 QString MediaFormWidget::getTipoSelezionato() {
     int id = tipoGroup->checkedId();
@@ -221,9 +271,9 @@ void MediaFormWidget::pulisciCampi() {
     anno->setValue(2025);  // o un valore neutro
     id->clear();
     int idCheck = tipoGroup->checkedId();
-    radioLibro->setChecked(true);
-    radioFilm->setChecked(false);
-    radioArticolo->setChecked(false);
+    //radioLibro->setChecked(true);
+    //radioFilm->setChecked(false);
+    //radioArticolo->setChecked(false);
     // altri campi (tutti i campi di libro, film, articolo)
     switch(idCheck) {
         case 0: //Libro

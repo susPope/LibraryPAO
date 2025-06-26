@@ -1,18 +1,5 @@
 {
     "articoli": [
-        {
-            "anno": 2025,
-            "autore": "WERWER",
-            "disponibile": true,
-            "genere": "WERWER",
-            "id": "ART-EREWR-WERWER-0",
-            "nprestiti": 0,
-            "pagine": 1,
-            "proxDisp": "2025-06-07",
-            "rivista": "WERW",
-            "titolo": "EREWR",
-            "volume": 1
-        }
     ],
     "film": [
         {
@@ -36,6 +23,45 @@
             "regista": "qweqwe",
             "tipo": "Libro",
             "titolo": "plisco"
+        },
+        {
+            "anno": 2025,
+            "cast": [
+                "qweqwe",
+                "qwe",
+                "wqe",
+                "qw",
+                "e",
+                "qwe",
+                "wq",
+                "e"
+            ],
+            "disponibile": true,
+            "durata": 1,
+            "genere": "wewweqq",
+            "id": "FIL-PLISCO1-QWEQWE-0",
+            "nprestiti": 0,
+            "proxDisp": "2025-06-25",
+            "regista": "qweqwe",
+            "tipo": "Libro",
+            "titolo": "plisco1"
+        },
+        {
+            "anno": 2025,
+            "cast": [
+                "aaa",
+                "bbb",
+                "ccc"
+            ],
+            "disponibile": true,
+            "durata": 122,
+            "genere": "aaa",
+            "id": "FIL-AAA1-AAAA-0",
+            "nprestiti": 0,
+            "proxDisp": "2025-06-25",
+            "regista": "aaaa",
+            "tipo": "Libro",
+            "titolo": "aaa1"
         }
     ],
     "libri": [
@@ -45,13 +71,13 @@
             "disponibile": false,
             "editore": "qweqweq",
             "genere": "wqeqweqwe",
-            "id": "LIB-POLLO1-QWEQWE-1",
+            "id": "LIB-1234-QWEQWE-0",
             "isbn": "1234567890",
             "nprestiti": 8,
             "pagine": 1,
             "proxDisp": "2025-05-07",
             "tipo": "Libro",
-            "titolo": "pollo1"
+            "titolo": "1234"
         },
         {
             "anno": 2025,
@@ -70,30 +96,30 @@
         {
             "anno": 2025,
             "autore": "qweqwe",
-            "disponibile": false,
+            "disponibile": true,
             "editore": "qweqweqw",
             "genere": "qweqweqweqwe",
             "id": "LIB-QWEQWE-QWEQWE-0",
             "isbn": "1234567899",
             "nprestiti": 2,
             "pagine": 1,
-            "proxDisp": "2025-07-07",
+            "proxDisp": "2025-06-26",
             "tipo": "Libro",
             "titolo": "qweqwe"
         },
         {
             "anno": 2025,
             "autore": "qweqwe",
-            "disponibile": true,
+            "disponibile": false,
             "editore": "qweqweq",
             "genere": "wqeqweqwe",
-            "id": "LIB-POLLO123-QWEQWE-0",
+            "id": "LIB-POLLO1235-QWEQWE-0",
             "isbn": "1234567890",
-            "nprestiti": 0,
+            "nprestiti": 3,
             "pagine": 1,
-            "proxDisp": "2025-06-07",
+            "proxDisp": "2025-07-26",
             "tipo": "Libro",
-            "titolo": "pollo123"
+            "titolo": "pollo1235"
         },
         {
             "anno": 2025,
@@ -103,9 +129,9 @@
             "genere": "wqeqweqwe",
             "id": "LIB-POLLO123-QWEQWE-2",
             "isbn": "1234567890",
-            "nprestiti": 0,
+            "nprestiti": 2,
             "pagine": 1,
-            "proxDisp": "2025-06-07",
+            "proxDisp": "2025-06-26",
             "tipo": "Libro",
             "titolo": "pollo123"
         },
@@ -150,6 +176,34 @@
             "proxDisp": "2025-06-24",
             "tipo": "Libro",
             "titolo": "dsdsd"
+        },
+        {
+            "anno": 2025,
+            "autore": "11",
+            "disponibile": true,
+            "editore": "qweqweq",
+            "genere": "wqeqweqwe",
+            "id": "LIB-ERNESTO-11-0",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-26",
+            "tipo": "Libro",
+            "titolo": "ernesto"
+        },
+        {
+            "anno": 2025,
+            "autore": "qweqwe",
+            "disponibile": true,
+            "editore": "qweqweq",
+            "genere": "aszdhjukiu77",
+            "id": "LIB-1234-QWEQWE-1",
+            "isbn": "1234567890",
+            "nprestiti": 0,
+            "pagine": 1,
+            "proxDisp": "2025-06-26",
+            "tipo": "Libro",
+            "titolo": "1234"
         }
     ]
 }

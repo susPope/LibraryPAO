@@ -14,6 +14,8 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QShortcut>
+#include <QKeySequence>
 
 MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     mediaList = new QListWidget(this);
@@ -21,28 +23,41 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     mediaForm = new MediaFormWidget(this);
 
     addButton = new QPushButton("Aggiungi", this);
+    addButton->setToolTip("Aggiunge un media");
     editButton = new QPushButton("Modifica", this);
+    editButton->setToolTip("Modifica il media selezionato con i campi del form");
     deleteButton = new QPushButton("Elimina", this);
+    deleteButton->setToolTip("Elimina il media selezionato");
+    cleanFieldsButton = new QPushButton("Clean", this);
+    cleanFieldsButton->setToolTip("Ripulisce tutti i campi del form");
     importDBButton = new QPushButton("Importa DataBase", this);
+    importDBButton->setToolTip("Importa un nuovo JSON");
     deleteDBButton = new QPushButton("Elimina DataBase", this);
+    deleteDBButton->setToolTip("Elimina tutti i media dal JSON");
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(addButton);
-    buttonLayout->addWidget(editButton);
-    buttonLayout->addWidget(deleteButton);
-    buttonLayout->addWidget(importDBButton);
-    buttonLayout->addWidget(deleteDBButton);
+    QGridLayout* actionLayout = new QGridLayout;
+    actionLayout->addWidget(addButton, 0, 0);
+    actionLayout->addWidget(editButton, 0, 1);
+    actionLayout->addWidget(deleteButton, 0, 2);
+    actionLayout->addWidget(importDBButton, 1, 0);
+    actionLayout->addWidget(deleteDBButton, 1, 1);
+    actionLayout->addWidget(cleanFieldsButton, 1, 2);
+    actionLayout->setSpacing(10);
+    actionLayout->setContentsMargins(10, 10, 10, 10);
 
     searchWidget = new SearchWidget(this); // Barra di ricerca
 
+    QVBoxLayout *centralRightLayout = new QVBoxLayout;
+    centralRightLayout->addWidget(mediaForm);
+    centralRightLayout->addLayout(actionLayout);
+
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(mediaList);
-    centralLayout->addWidget(mediaForm);
+    centralLayout->addLayout(centralRightLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(searchWidget);
     mainLayout->addLayout(centralLayout);
-    mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
     setWindowTitle("Gestione Media");
@@ -65,6 +80,26 @@ MediaManagerWidget::MediaManagerWidget(QWidget *parent) : QWidget(parent) {
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteSelectedMedia()));
     connect(importDBButton, SIGNAL(clicked()), this, SLOT(importDB()));
     connect(deleteDBButton, SIGNAL(clicked()), this, SLOT(deleteAllMedia()));
+    connect(cleanFieldsButton, SIGNAL(clicked()), this, SLOT(cleanFields()));
+
+    // Shortcut per addMedia: Ctrl + A
+    QShortcut* shortcutAdd = new QShortcut(QKeySequence("Ctrl+A"), this);
+    connect(shortcutAdd, &QShortcut::activated, this, &MediaManagerWidget::addMedia);
+
+    // Shortcut per editSelectedMedia: Ctrl + E
+    QShortcut* shortcutEdit = new QShortcut(QKeySequence("Ctrl+E"), this);
+    connect(shortcutEdit, &QShortcut::activated, this, &MediaManagerWidget::editSelectedMedia);
+
+    // Shortcut per deleteSelectedMedia: Canc o Backspace
+    QShortcut* shortcutDelete1 = new QShortcut(QKeySequence(Qt::Key_Delete), this);
+    connect(shortcutDelete1, &QShortcut::activated, this, &MediaManagerWidget::deleteSelectedMedia);
+    QShortcut* shortcutDelete2 = new QShortcut(QKeySequence(Qt::Key_Backspace), this);
+    connect(shortcutDelete2, &QShortcut::activated, this, &MediaManagerWidget::deleteSelectedMedia);
+
+    // Shortcut per importDB: Ctrl + I
+    QShortcut* shortcutImport = new QShortcut(QKeySequence("Ctrl+I"), this);
+    connect(shortcutImport, &QShortcut::activated, this, &MediaManagerWidget::importDB);
+
     connect(mediaList, &QListWidget::itemClicked, this, &MediaManagerWidget::populateFormFromSelected);
     connect(searchWidget, &SearchWidget::ricercaAvviata, this, &MediaManagerWidget::onRicercaAvviata);
 }
@@ -81,12 +116,11 @@ void MediaManagerWidget::addMedia() {
 
     // Aggiunge alla repository
     Media* rawPtr = nuovo.get();
-    MediaRepo::instance().aggiungiMedia(std::move(nuovo));
-
-    // Aggiorna interfaccia
-    //QListWidgetItem* item = new QListWidgetItem(rawPtr->getTitolo());
-    //item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(rawPtr)));
-    //mediaList->addItem(item);
+    QString errore = MediaRepo::instance().aggiungiMedia(std::move(nuovo));
+    if (!errore.isEmpty()) {
+        QMessageBox::critical(this, "Errore durante l'aggiunta", errore);
+        return;
+    }
 
     QListWidgetItem* item = new QListWidgetItem();
     MediaViewWidget* widget = new MediaViewWidget(rawPtr);
@@ -124,17 +158,22 @@ void MediaManagerWidget::editSelectedMedia() {
         QMessageBox::warning(this, "Modifica non valida", "Non puoi cambiare il tipo del media.");
         return;
     }
-
-    if (mediaForm->aggiornaMedia(media)) {
+    QString errore = mediaForm->aggiornaMedia(media);
+    if (errore.isEmpty()) {
         QWidget* w = mediaList->itemWidget(item);  // ottieni il widget associato all'elemento selezionato
         if (auto* view = dynamic_cast<MediaViewWidget*>(w)) {
             view->aggiorna();  // chiami un metodo che rilegge i dati da 'media' e li mostra
         }
         //item->setText(media->getTitolo());
-        MediaRepo::instance().aggiornaMedia(media);
+        QString errore = MediaRepo::instance().aggiornaMedia(media);
+        if (!errore.isEmpty()) {
+            QMessageBox::critical(this, "Errore durante l'aggiornamento", errore);
+            return;
+        }
         mediaForm->pulisciCampi();
     } else {
-        QMessageBox::warning(this, "Modifica", "Errore durante l'aggiornamento del media.");
+        QMessageBox::warning(this, "Errore", errore);
+        return;
     }
 }
 
@@ -144,7 +183,11 @@ void MediaManagerWidget::deleteSelectedMedia() {
     if (item) {
         Media* media = getMediaFromItem(item);
         if (media) {
-            MediaRepo::instance().rimuoviMedia(media);
+            QString errore = MediaRepo::instance().rimuoviMedia(media);
+            if (!errore.isEmpty()) {
+                QMessageBox::critical(this, "Errore durante l'eliminazione", errore);
+                return;
+            }
         }
         QWidget* widget = mediaList->itemWidget(item);
         if (widget) {
@@ -155,6 +198,7 @@ void MediaManagerWidget::deleteSelectedMedia() {
         mediaForm->pulisciCampi();
     } else {
         QMessageBox::warning(this, "Elimina", "Seleziona un media da eliminare.");
+        return;
     }
 }
 
@@ -168,7 +212,12 @@ void MediaManagerWidget::importDB() {
     MediaRepo::instance().setPath(fileName);
     mediaForm->pulisciCampi();
     mediaList->clear();  // svuota la lista visuale
-    MediaRepo::instance().importaDB();
+
+    QString errore = MediaRepo::instance().importaDB();
+    if (!errore.isEmpty()) {
+        QMessageBox::critical(this, "Errore durante l'importazione", errore);
+        return;
+    }
 
     const auto& tuttiIMedia = MediaRepo::instance().getTuttiIMedia();
     for (const auto& ptr : tuttiIMedia) {
@@ -183,7 +232,6 @@ void MediaManagerWidget::importDB() {
     }
 
     QMessageBox::information(this, "Importazione completata", "Tutti i media sono stati importati.");
-
 }
 
 void MediaManagerWidget::deleteAllMedia() {
@@ -192,11 +240,19 @@ void MediaManagerWidget::deleteAllMedia() {
                                             QMessageBox::Yes | QMessageBox::No);
 
     if (risposta == QMessageBox::Yes) {
-        MediaRepo::instance().svuotaDB();
+        QString errore = MediaRepo::instance().svuotaDB();
+        if (!errore.isEmpty()) {
+            QMessageBox::critical(this, "Errore durante la cancellazione", errore);
+            return;
+        }
         mediaList->clear();  // svuota la lista visuale
         QMessageBox::information(this, "Eliminazione completata", "Tutti i media sono stati eliminati.");
         mediaForm->pulisciCampi();
     }
+}
+
+void MediaManagerWidget::cleanFields() {
+    mediaForm->pulisciCampi();
 }
 
 Media* MediaManagerWidget::getMediaFromItem(QListWidgetItem* item) {
@@ -227,8 +283,3 @@ void MediaManagerWidget::onRicercaAvviata(const QString& testo, const QString& c
         item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
     }
 }
-
-//void MediaManagerWidget::aggiornaRicerca() {
-//    // Reinvoca la ricerca con i parametri attuali
-//    onRicercaAvviata(searchWidget->getTestoRicerca(), searchWidget->getCriterioRicerca());
-//}

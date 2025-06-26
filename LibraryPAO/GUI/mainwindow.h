@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 class QPushButton;
 class QStackedWidget;
@@ -22,13 +23,12 @@ private slots:
     void showLoanManager();
 
 private:
+    QLabel* titleLabel;
     QPushButton *gestioneBtn;
-    //QPushButton *ricercaBtn;
     QPushButton *prestitiBtn;
 
     QStackedWidget *stackedWidget;
     MediaManagerWidget *mediaWidget;
-    //SearchWidget *searchWidget;
     LoanManagerWidget *loanWidget;
 };
 

@@ -4,6 +4,7 @@
 #include "articolo.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QDebug>
 #include <QDate>
@@ -23,12 +24,19 @@ MediaRepo& MediaRepo::instance() {
     return repo;
 }
 
-void MediaRepo::aggiungiMedia(std::unique_ptr<Media> m) {
+QString MediaRepo::aggiungiMedia(std::unique_ptr<Media> m) {
+    QString check = checkScrivibilitaFile();
+    if (!check.isEmpty()) return check;
+
     mediaList.push_back(std::move(m));
-    salvaSuJson();
+    QString errore = salvaSuJson();
+    if (!errore.isEmpty()) { return errore; }
+    return "";
 }
 
-void MediaRepo::aggiornaMedia(Media* m) {
+QString MediaRepo::aggiornaMedia(Media* m) {
+    QString check = checkScrivibilitaFile();
+    if (!check.isEmpty()) return check;
 
     if (auto l = dynamic_cast<Libro*>(m))
         qInfo() << "Modificato Libro: " << l->getTitolo() << "Autore: " << l->getAutore();
@@ -37,42 +45,58 @@ void MediaRepo::aggiornaMedia(Media* m) {
     else if (auto a = dynamic_cast<Articolo*>(m))
         qInfo() << "Modificato Articolo: " << a->getTitolo() << "Autore: " << a->getAutore();
 
-    salvaSuJson();
+    QString errore = salvaSuJson();
+    if (!errore.isEmpty()) { return errore; }
+    return "";
 }
 
-bool MediaRepo::rimuoviMedia(Media* m) {
+QString MediaRepo::rimuoviMedia(Media* m) {
+    QString check = checkScrivibilitaFile();
+    if (!check.isEmpty()) return check;
+
     auto it = std::remove_if(mediaList.begin(), mediaList.end(),
                 [m](const std::unique_ptr<Media>& ptr) { return ptr.get() == m; });
 
     if (it != mediaList.end()) {
         mediaList.erase(it, mediaList.end());
-        salvaSuJson();
-        return true;
+        QString errore = salvaSuJson();
+        if (!errore.isEmpty()) { return errore; }
+        return "";
     }
-    return false;
+    return "Elemento non trovato nel repository.";
 }
 
 const std::vector<std::unique_ptr<Media>>& MediaRepo::getTuttiIMedia() const {
     return mediaList;
 }
 
-void MediaRepo::importaDB() {
+QString MediaRepo::importaDB() {
+    QString check = checkScrivibilitaFile();
+    if (!check.isEmpty()) return check;
+
     svuota();
-    caricaDaJson();
+    QString errore = caricaDaJson();
+    if (!errore.isEmpty()) { return errore; }
     qInfo() << "DataBase importato";
+    return "";
 }
 
-void MediaRepo::svuotaDB() {
+QString MediaRepo::svuotaDB() {
+    QString check = checkScrivibilitaFile();
+    if (!check.isEmpty()) return check;
+
     svuota();
-    salvaSuJson();
+    QString errore = salvaSuJson();
+    if (!errore.isEmpty()) { return errore; }
     qInfo() << "DataBase eliminato";
+    return "";
 }
 
 void MediaRepo::svuota() {
     mediaList.clear();
 }
 
-void MediaRepo::salvaSuJson() {
+QString MediaRepo::salvaSuJson() {
     QJsonArray libri, film, articoli;
 
     for (const auto& ptr : mediaList) {
@@ -90,22 +114,22 @@ void MediaRepo::salvaSuJson() {
     root["film"] = film;
     root["articoli"] = articoli;
 
-    qDebug() << "Salvataggio su path:" << path;
-
     QFile file(path);
     if (file.open(QIODevice::WriteOnly)) {
         file.write(QJsonDocument(root).toJson(QJsonDocument::Indented));
         file.close();
+        return "";
     } else {
         qWarning() << "Errore apertura file:" << file.errorString();
+        return "Errore apertura file: " + file.errorString();
     }
 }
 
-void MediaRepo::caricaDaJson() {
+QString MediaRepo::caricaDaJson() {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Impossibile aprire il file per la lettura:" << file.errorString();
-        return;
+        return "Impossibile aprire il file per la lettura: " + file.errorString();
     }
 
     QByteArray jsonData = file.readAll();
@@ -115,7 +139,7 @@ void MediaRepo::caricaDaJson() {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData, &parseError);
     if (parseError.error != QJsonParseError::NoError) {
         qWarning() << "Errore parsing JSON:" << parseError.errorString();
-        return;
+        return "Errore parsing JSON: " + parseError.errorString();
     }
 
     QJsonObject root = doc.object();
@@ -125,8 +149,8 @@ void MediaRepo::caricaDaJson() {
             QJsonObject obj = val.toObject();
             std::unique_ptr<Media> m;
 
-            if (tipo == "libri")      m = std::make_unique<Libro>(Libro::fromJson(obj));
-            else if (tipo == "film")  m = std::make_unique<Film>(Film::fromJson(obj));
+            if (tipo == "libri")         m = std::make_unique<Libro>(Libro::fromJson(obj));
+            else if (tipo == "film")     m = std::make_unique<Film>(Film::fromJson(obj));
             else if (tipo == "articoli") m = std::make_unique<Articolo>(Articolo::fromJson(obj));
 
             if (m) mediaList.push_back(std::move(m));
@@ -138,6 +162,7 @@ void MediaRepo::caricaDaJson() {
     aggiungiDaArray(root["articoli"].toArray(), "articoli");
 
     qDebug() << "Caricati" << mediaList.size() << "media dal JSON.";
+    return "";  // tutto ok
 }
 
 // CONTROLLI
@@ -253,27 +278,39 @@ std::vector<Media*> MediaRepo::cercaMedia(const QString& testo, const QString& c
     return risultati;
 }
 
-void MediaRepo::aggiungiPrestito(Media* m) {
+QString MediaRepo::aggiungiPrestito(Media* m) {
     if (m->getDisponibilita()) {
+        QString check = checkScrivibilitaFile();
+        if (!check.isEmpty()) return check;
+
         m->setProssimaDisponibilita(m->calcolaPrestito());
         m->setDisponibilita(false); // Non disponibile
         m->setNprestiti(m->getNprestiti()+1);
 
-        salvaSuJson();
+        QString errore = salvaSuJson();
+        if (!errore.isEmpty()) { return errore; }
     } else {
-        qWarning() << "Libro non disponibile. Non può essere prenotato!";
+        qWarning() << "Media non disponibile. Non può essere prenotato!";
+        return "Il media selezionato non è disponibile per il prestito.";
     }
+    return "";
 }
 
-void MediaRepo::restituisciPrestito(Media* m){
+QString MediaRepo::restituisciPrestito(Media* m){
     if (!m->getDisponibilita()) {
+        QString check = checkScrivibilitaFile();
+        if (!check.isEmpty()) return check;
+
         m->setProssimaDisponibilita(QDate::currentDate());
         m->setDisponibilita(true); // Disponibile
 
-        salvaSuJson();
+        QString errore = salvaSuJson();
+        if (!errore.isEmpty()) { return errore; }
     } else {
         qWarning() << "Libro non prenotato. Non può essere restituito!";
+        return "Il media non è attualmente in prestito, quindi non può essere restituito.";
     }
+    return "";
 }
 
 std::vector<Media*> MediaRepo::cercaPrestiti(const QString& testo, const QString& criterio, const QString& filtroDisponibilita) {
@@ -320,4 +357,33 @@ bool MediaRepo::setPath(const QString& nuovaPath) {
     }
     path = nuovaPath;
     return true;
+}
+
+QString MediaRepo::checkScrivibilitaFile() const {
+    if (path.trimmed().isEmpty()) {
+        return "Percorso del file JSON non valido (vuoto).";
+    }
+
+    QFileInfo fileInfo(path);
+    if (!fileInfo.exists()) {
+        return "Il file non esiste: " + path;
+    }
+    if (fileInfo.isDir()) {
+        return "Il percorso punta a una directory, non a un file: " + path;
+    }
+    if (!fileInfo.isFile()) {
+        return "Il percorso non punta a un file regolare: " + path;
+    }
+
+    QFile file(path);
+    try {
+        if (!file.open(QIODevice::ReadWrite)) {
+            return "Impossibile aprire il file JSON in scrittura: " + file.errorString();
+        }
+        file.close();
+    } catch (...) {
+        return "Eccezione durante l'apertura del file: " + path;
+    }
+
+    return "";  // OK
 }

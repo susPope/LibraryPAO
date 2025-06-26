@@ -4,11 +4,66 @@
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QToolBar>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    // Barra menu di navigazione
+    setWindowIcon(QIcon(":/resources/icons/logo.png"));
+
+    titleLabel = new QLabel("📚 Gestionale Biblioteca 📚");
+    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->setStyleSheet(R"(
+        QLabel {
+            font-size: 30px;
+            font-weight: bold;
+        }
+    )");
+
+
+    // Linea orizzontale
+    QFrame* line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+    //line->setStyleSheet("color: #aaa;"); // oppure usa border-color
+    line->setStyleSheet(R"(
+        QFrame {
+            border: 3px solid #bbb;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    )");
+
     gestioneBtn = new QPushButton("Gestione Media");
     prestitiBtn = new QPushButton("Gestione Prestiti");
+
+    gestioneBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    prestitiBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    gestioneBtn->setCheckable(true);
+    prestitiBtn->setCheckable(true);
+    gestioneBtn->setChecked(true);
+
+    QButtonGroup* navGroup = new QButtonGroup(this);
+    navGroup->setExclusive(true);
+    navGroup->addButton(gestioneBtn, 0);
+    navGroup->addButton(prestitiBtn, 1);
+
+    // Stile solo per pulsanti selezionati
+    QString navButtonStyle = R"(
+        QPushButton {
+            border-radius: 10px;
+            padding: 8px 16px;
+        }
+        QPushButton:checked {
+            background-color: palette(highlight);
+            color: palette(highlightedText);
+            font-weight: bold;
+            border: 1px solid palette(dark);
+            border-radius: 10px;
+        }
+    )";
+
+    gestioneBtn->setStyleSheet(navButtonStyle);
+    prestitiBtn->setStyleSheet(navButtonStyle);
 
     // Creazione Widget specifici
     mediaWidget = new MediaManagerWidget();
@@ -27,7 +82,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     buttonLayout->addWidget(gestioneBtn);
     buttonLayout->addWidget(prestitiBtn);
 
-    // Aggiunta dei layout
+    // Aggiunta al layout principale
+    layout->addWidget(titleLabel);
+
+    layout->addWidget(line);
     layout->addLayout(buttonLayout);
     layout->addWidget(stackedWidget);
 

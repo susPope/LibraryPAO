@@ -3,5 +3,6 @@
         <file>icons/articolo.png</file>
         <file>icons/film.png</file>
         <file>icons/libro.png</file>
+        <file>icons/logo.png</file>
     </qresource>
 </RCC>
