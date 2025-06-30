@@ -12,6 +12,19 @@
             "rivista": "Le Scienze",
             "titolo": "La lunga infanzia umana",
             "volume": 667
+        },
+        {
+            "anno": 2025,
+            "autore": "Giorgio Manzi",
+            "disponibile": true,
+            "genere": "Antropologia",
+            "id": "ART-LALUNGAINFANZIAUMANA-GIORGIOMANZI-1",
+            "nprestiti": 0,
+            "pagine": 30,
+            "proxDisp": "2025-06-30",
+            "rivista": "Le Scienze",
+            "titolo": "La lunga infanzia umana",
+            "volume": 667
         }
     ],
     "film": [
@@ -68,6 +81,24 @@
             "regista": "Ridley Scott",
             "tipo": "Libro",
             "titolo": "Il gladiatore"
+        },
+        {
+            "anno": 1997,
+            "cast": [
+                "Leonardo DiCaprio",
+                "Kate Winslet",
+                "Billy Zane",
+                "Kathy Bates"
+            ],
+            "disponibile": true,
+            "durata": 195,
+            "genere": "Drammatico / Romantico",
+            "id": "FIL-TITANIC-JAMESCAMERON-1",
+            "nprestiti": 0,
+            "proxDisp": "2025-06-30",
+            "regista": "James Cameron",
+            "tipo": "Libro",
+            "titolo": "Titanic"
         }
     ],
     "libri": [
@@ -112,6 +143,20 @@
             "proxDisp": "2025-06-25",
             "tipo": "Libro",
             "titolo": "Io non ho paura"
+        },
+        {
+            "anno": 1954,
+            "autore": "J.R.R. Tolkien",
+            "disponibile": true,
+            "editore": "Allen & Unwin",
+            "genere": "Fantasy",
+            "id": "LIB-THELORDOFTHERINGS-J.R.R.TOLKIEN-1",
+            "isbn": "9780261102385",
+            "nprestiti": 0,
+            "pagine": 1178,
+            "proxDisp": "2025-06-30",
+            "tipo": "Libro",
+            "titolo": "The Lord of the Rings"
         }
     ]
 }
