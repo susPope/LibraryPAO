@@ -3,19 +3,18 @@
 
 #include "mediaformwidget.h"
 #include "GUI/SearchBar/searchwidget.h"
+
 #include <QWidget>
 #include <QListWidgetItem>
 
 class QListWidget;
 class QPushButton;
 
-class MediaManagerWidget : public QWidget
-{
+class MediaManagerWidget : public QWidget {
     Q_OBJECT
 
 public:
     explicit MediaManagerWidget(QWidget *parent = nullptr);
-    //void aggiornaRicerca();
 
 private slots:
     void addMedia();

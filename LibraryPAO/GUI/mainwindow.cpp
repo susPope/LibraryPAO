@@ -1,6 +1,6 @@
 #include "mainwindow.h"
-#include "GUI/MediaManager/mediamanagerwidget.h"
-#include "GUI/LoanManager/loanmanagerwidget.h"
+#include "MediaManager/mediamanagerwidget.h"
+#include "LoanManager/loanmanagerwidget.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
@@ -23,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
-    //line->setStyleSheet("color: #aaa;"); // oppure usa border-color
     line->setStyleSheet(R"(
         QFrame {
             border: 3px solid #bbb;

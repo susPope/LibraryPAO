@@ -1,10 +1,10 @@
 #ifndef LOANMANAGERWIDGET_H
 #define LOANMANAGERWIDGET_H
 
-#include <QWidget>
-#include <QListWidgetItem>
 #include "Project/media.h"
 #include "GUI/SearchBar/searchwidget.h"
+
+#include <QListWidgetItem>
 
 class QListWidget;
 class QPushButton;

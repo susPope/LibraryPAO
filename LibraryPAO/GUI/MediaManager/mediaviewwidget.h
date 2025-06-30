@@ -1,10 +1,11 @@
 #ifndef MEDIAVIEWWIDGET_H
 #define MEDIAVIEWWIDGET_H
 
+#include "Project/media.h"
+
 #include <QWidget>
 #include <QLabel>
 #include <QHBoxLayout>
-#include "Project/media.h"
 
 class MediaViewWidget : public QWidget {
     Q_OBJECT

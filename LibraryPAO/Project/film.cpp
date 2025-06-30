@@ -1,4 +1,5 @@
 #include "film.h"
+
 #include <QDebug>
 #include <QJsonArray>
 
@@ -29,14 +30,6 @@ QString Film::generaId(int count) const {
 }
 
 // Implementazione metodi polimorfi
-QString Film::mostraDettagli() const {
-    QString dettagli = QString("%1\nRegista: %2\nDurata: %3 min\nCast: %4")
-                           .arg(getTitolo(), regista)
-                        .arg(durata)
-                        .arg(cast.join(", "));
-    return dettagli;
-}
-
 QDate Film::calcolaPrestito() const {
     // Film hanno prestito più breve (7 giorni)
     return QDate::currentDate().addDays(7);
@@ -94,6 +87,21 @@ Film Film::fromJson(const QJsonObject& obj) {
     return f;
 }
 
+QString Film::getTipoIcona() const {
+    return "🎬 Film";
+}
+
+QString Film::getDettagliString() const {
+    return QString("Regista: %1 • Durata: %2 min").arg(getRegista()).arg(getDurata());
+}
+
+QString Film::getIconaPath(bool darkTheme) const {
+    if(darkTheme) {
+        return ":/resources/icons/light/film.png";
+    } else {
+        return ":/resources/icons/dark/film.png";
+    }
+}
 
 // SETTER implementations
 void Film::setRegista(const QString& nuovoregista) {

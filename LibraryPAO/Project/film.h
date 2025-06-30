@@ -2,6 +2,7 @@
 #define FILM_H
 
 #include "media.h"
+
 #include <QStringList>
 #include <QJsonObject>
 
@@ -12,7 +13,6 @@ private:
     QStringList cast;
 
 public:
-    //Film(const QString& regista, int durata, const QStringList& cast);
     Film();
     Film(const QString& titolo, const QString& genere, int anno,
           const QString& regista, int durata, const QStringList& cast);
@@ -20,12 +20,12 @@ public:
 
     // Implementazione metodi polimorfi
     QString generaId(int count) const override;
-    QString mostraDettagli() const override;
     QDate calcolaPrestito() const override;
     QJsonObject toJson() const override;
-
     static Film fromJson(const QJsonObject& obj);
-
+    QString getTipoIcona() const override;
+    QString getDettagliString() const override;
+    QString getIconaPath(bool darkTheme) const override;
 
     // GETTER
     QString getRegista() const { return regista; }

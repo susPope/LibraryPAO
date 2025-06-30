@@ -1,9 +1,9 @@
 #ifndef LOANVIEWWIDGET_H
 #define LOANVIEWWIDGET_H
 
-#include <QWidget>
-#include <QLabel>
 #include "Project/media.h"
+
+#include <QLabel>
 
 class LoanViewWidget : public QWidget {
     Q_OBJECT

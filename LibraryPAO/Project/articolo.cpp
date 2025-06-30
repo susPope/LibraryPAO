@@ -1,4 +1,5 @@
 #include "articolo.h"
+
 #include <QDebug>
 #include <QJsonValue>
 #include <QDate>
@@ -31,11 +32,6 @@ QString Articolo::generaId(int count) const {
 }
 
 // Implementazione metodi polimorfi
-QString Articolo::mostraDettagli() const {
-    return QString("%1\nAutore: %2\nRivista: %3 min\nVolume: %4\nPagine: %5")
-        .arg(getTitolo(), autore, rivista).arg(volume).arg(pagine);
-}
-
 QDate Articolo::calcolaPrestito() const {
     // Articoli hanno prestito brevissimo (2 giorni)
     return QDate::currentDate().addDays(2);
@@ -80,6 +76,22 @@ Articolo Articolo::fromJson(const QJsonObject& obj) {
     a.setPagine(obj["pagine"].toInt());
 
     return a;
+}
+
+QString Articolo::getTipoIcona() const {
+    return "📰 Articolo";
+}
+
+QString Articolo::getDettagliString() const {
+    return QString("Autore: %1 • Rivista: %2").arg(getAutore(), getRivista());
+}
+
+QString Articolo::getIconaPath(bool darkTheme) const {
+    if(darkTheme) {
+        return ":/resources/icons/light/articolo.png";
+    } else {
+        return ":/resources/icons/dark/articolo.png";
+    }
 }
 
 // SETTER implementations

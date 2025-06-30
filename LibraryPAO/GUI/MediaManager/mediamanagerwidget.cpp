@@ -1,8 +1,5 @@
 #include "mediamanagerwidget.h"
 #include "Project/media.h"
-#include "Project/libro.h"
-#include "Project/film.h"
-#include "Project/articolo.h"
 #include "Project/mediarepo.h"
 #include "GUI/MediaManager/mediaviewwidget.h"
 
@@ -146,25 +143,19 @@ void MediaManagerWidget::editSelectedMedia() {
     Media* media = getMediaFromItem(item);
     if (!media) return;
 
-    //controllo sul radio button (TODO: spostare in mediarepo)
-    QString tipoOriginale;
-    if (dynamic_cast<Libro*>(media)) tipoOriginale = "Libro";
-    else if (dynamic_cast<Film*>(media)) tipoOriginale = "Film";
-    else if (dynamic_cast<Articolo*>(media)) tipoOriginale = "Articolo";
-
-    QString tipoForm = mediaForm->getTipoSelezionato();  // "Libro", "Film", "Articolo"
-
-    if (tipoForm != tipoOriginale) {
+    // Controllo del tipo con typeid invece di getTipo()
+    const std::type_info& tipoAttuale = typeid(*media);
+    const std::type_info& tipoSelezionato = mediaForm->getTipoSelezionatoTypeInfo();
+    if (tipoAttuale != tipoSelezionato) {
         QMessageBox::warning(this, "Modifica non valida", "Non puoi cambiare il tipo del media.");
         return;
     }
     QString errore = mediaForm->aggiornaMedia(media);
     if (errore.isEmpty()) {
-        QWidget* w = mediaList->itemWidget(item);  // ottieni il widget associato all'elemento selezionato
+        QWidget* w = mediaList->itemWidget(item);  // Ottiene il widget associato all'elemento selezionato
         if (auto* view = dynamic_cast<MediaViewWidget*>(w)) {
-            view->aggiorna();  // chiami un metodo che rilegge i dati da 'media' e li mostra
+            view->aggiorna();  // Chiama un metodo che rilegge i dati da 'media' e li mostra
         }
-        //item->setText(media->getTitolo());
         QString errore = MediaRepo::instance().aggiornaMedia(media);
         if (!errore.isEmpty()) {
             QMessageBox::critical(this, "Errore durante l'aggiornamento", errore);
@@ -192,7 +183,7 @@ void MediaManagerWidget::deleteSelectedMedia() {
         QWidget* widget = mediaList->itemWidget(item);
         if (widget) {
             mediaList->removeItemWidget(item);
-            widget->deleteLater();  // evita memory leak
+            widget->deleteLater();  // Evita memory leak
         }
         delete item;
         mediaForm->pulisciCampi();
@@ -203,7 +194,7 @@ void MediaManagerWidget::deleteSelectedMedia() {
 }
 
 void MediaManagerWidget::importDB() {
-    //codice per aprire la comunicazione con il so e richiedere l'importazione di un json
+    // Codice per aprire la comunicazione con il so e richiedere l'importazione di un json
     QString fileName = QFileDialog::getOpenFileName(this, "Importa Database", "", "File JSON (*.json)");
     if (fileName.isEmpty())
         return;
@@ -264,12 +255,12 @@ Media* MediaManagerWidget::getMediaFromItem(QListWidgetItem* item) {
 void MediaManagerWidget::populateFormFromSelected(QListWidgetItem* item) {
     Media* media = getMediaFromItem(item);
     if (media) {
-        mediaForm->caricaMedia(media);  // Metodo che devi implementare in MediaFormWidget
+        mediaForm->caricaMedia(media);
     }
 }
 
 void MediaManagerWidget::onRicercaAvviata(const QString& testo, const QString& criterio) {
-    // Puliamo la lista attuale
+    // Pulisce la lista attuale
     mediaList->clear();
 
     // Recupera tutti i media filtrati dal repository

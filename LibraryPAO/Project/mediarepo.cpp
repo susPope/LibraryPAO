@@ -8,7 +8,7 @@
 #include <QJsonDocument>
 #include <QDebug>
 #include <QDate>
-#include <algorithm>    // per std::remove_if
+#include <algorithm>
 
 MediaRepo::MediaRepo() {
     svuota();
@@ -162,18 +162,42 @@ QString MediaRepo::caricaDaJson() {
     aggiungiDaArray(root["articoli"].toArray(), "articoli");
 
     qDebug() << "Caricati" << mediaList.size() << "media dal JSON.";
-    return "";  // tutto ok
+    return "";  // Tutto ok
 }
 
 // CONTROLLI
-bool MediaRepo::checkLibro(const QString& isbn) {
-    // Rimuovi spazi e trattini
-    QString cleaned = isbn;
+QString MediaRepo::normalizeISBN(const QString& raw) {
+    QString cleaned = raw;
     cleaned.remove(' ');
     cleaned.remove('-');
-    int len = cleaned.length();
 
-    return (len == 10 || len == 13);
+    if (cleaned.length() == 10 && cleaned[9].toUpper() == 'X') {
+        cleaned[9] = 'X';  // forza la 'X' maiuscola
+    }
+
+    return cleaned;
+}
+
+bool MediaRepo::isValidISBN(const QString& isbn) {
+    int len = isbn.length();
+    if (len != 10 && len != 13)
+        return false;
+
+    for (int i = 0; i < len; ++i) {
+        if (!isbn[i].isDigit()) {
+            if (len == 10 && i == 9 && isbn[i].toUpper() == 'X') {
+                continue;
+            }
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool MediaRepo::checkLibro(const QString& isbn, QString& isbnPulito) {
+    isbnPulito = normalizeISBN(isbn);
+    return isValidISBN(isbnPulito);
 }
 
 // Cerca l'ultimo numero di disambiguità negli id con titolo e autore uguali per creare un id univoco
@@ -210,7 +234,7 @@ int MediaRepo::countMedia(Media* media) {
                 QString t = libro->getTitolo().simplified().remove(' ').toUpper();
                 QString a = libro->getAutore().simplified().remove(' ').toUpper();
                 if (t == titolo && a == autore_regista) {
-                    // Estrai numero da ID: LIB-TITOLO-AUTORE-<numero>
+                    // Estrae numero da ID: LIB-TITOLO-AUTORE-<numero>
                     QStringList parts = id.split("-");
                     if (parts.size() >= 4) {
                         bool ok = false;
@@ -257,7 +281,7 @@ int MediaRepo::countMedia(Media* media) {
 std::vector<Media*> MediaRepo::cercaMedia(const QString& testo, const QString& criterio) {
     std::vector<Media*> risultati;
     for (const auto& mediaPtr : mediaList) {
-        Media* m = mediaPtr.get();  // non trasferisce la proprietà
+        Media* m = mediaPtr.get();  // Non trasferisce la proprietà
         if (criterio == "Titolo") {
             if (m->getTitolo().contains(testo, Qt::CaseInsensitive)) {
                 risultati.push_back(m);
@@ -326,9 +350,9 @@ std::vector<Media*> MediaRepo::cercaPrestiti(const QString& testo, const QString
             continue;
         else if (filtroDisponibilita == "In ritardo" && !m->isInRitardo()) // <- aggiunto controllo ritardo
             continue;
-        // Se "Tutti", non filtriamo
+        // Se "Tutti", non filtra
 
-        // Filtro testo e criterio
+        // Filtra testo e criterio
         if (criterio == "Titolo") {
             if (m->getTitolo().contains(testo, Qt::CaseInsensitive)) {
                 risultati.push_back(m);

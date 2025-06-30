@@ -1,4 +1,5 @@
 #include "libro.h"
+
 #include <QDebug>
 
 Libro::Libro(const QString& titolo, const QString& genere, int anno,
@@ -30,11 +31,6 @@ QString Libro::generaId(int count) const {
 
 
 // Implementazione altri metodi polimorfi
-QString Libro::mostraDettagli() const {
-    return QString("%1\nAutore: %2\nEditore: %3\nPagine: %4\nISBN: %5")
-        .arg(getTitolo(), autore, editore).arg(pagine).arg(isbn);
-}
-
 QDate Libro::calcolaPrestito() const {
     // Film hanno prestito più lungo (30 giorni)
     return QDate::currentDate().addDays(30);
@@ -82,6 +78,21 @@ Libro Libro::fromJson(const QJsonObject& obj) {
     return l;
 }
 
+QString Libro::getTipoIcona() const {
+    return "📚 Libro";
+}
+
+QString Libro::getDettagliString() const {
+    return QString("Autore: %1 • ISBN: %2").arg(getAutore(), getIsbn());
+}
+
+QString Libro::getIconaPath(bool darkTheme) const {
+    if(darkTheme) {
+        return ":/resources/icons/light/libro.png";
+    } else {
+        return ":/resources/icons/dark/libro.png";
+    }
+}
 
 // SETTER implementations
 void Libro::setAutore(const QString& nuovoautore) {

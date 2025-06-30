@@ -1,7 +1,8 @@
 #ifndef MEDIAFORMWIDGET_H
 #define MEDIAFORMWIDGET_H
 
-#include <QWidget>
+#include "Project/media.h"
+
 #include <QRadioButton>
 #include <QStackedWidget>
 #include <QLineEdit>
@@ -12,8 +13,6 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <memory>
-
-#include "Project/media.h"
 
 class MediaFormWidget : public QWidget {
     Q_OBJECT
@@ -27,6 +26,8 @@ public:
     void caricaMedia(Media* media);
     QString aggiornaMedia(Media* media);
     QString getTipoSelezionato();
+
+    const std::type_info& getTipoSelezionatoTypeInfo() const;
 
 private:
     // Selettore tipo media

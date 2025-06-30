@@ -1,4 +1,7 @@
 #include "searchwidget.h"
+#include "../themeutils.h"
+
+#include <QTimer>
 
 SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
     criterioCombo = new QComboBox(this);
@@ -7,7 +10,11 @@ SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
 
     searchEdit = new QLineEdit(this);
     searchEdit->setPlaceholderText("Cerca...");
-    searchEdit->setStyleSheet("QLineEdit { color: white; background-color: #333; } QLineEdit::placeholder { color: gray; }");
+    if (isDarkTheme()) {
+        searchEdit->setStyleSheet("QLineEdit { color: white; background-color: #333; } QLineEdit::placeholder { color: gray; }");
+    } else {
+        searchEdit->setStyleSheet("QLineEdit { color: black; background-color: #f0f0f0; } QLineEdit::placeholder { color: #666; }");
+    }
 
     searchButton = new QPushButton("🔍 Cerca", this);
     searchButton->setToolTip("Avvia la ricerca");
@@ -28,7 +35,7 @@ QString SearchWidget::getTestoRicerca() const {
 }
 
 QString SearchWidget::getCriterioRicerca() const {
-    return criterioCombo->currentText();  // o il nome corretto della QComboBox
+    return criterioCombo->currentText();
 }
 
 void SearchWidget::onTextEdited(const QString& testo) {

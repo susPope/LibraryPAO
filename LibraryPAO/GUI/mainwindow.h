@@ -8,7 +8,6 @@ class QPushButton;
 class QStackedWidget;
 
 class MediaManagerWidget;
-//class SearchWidget;
 class LoanManagerWidget;
 
 class MainWindow : public QMainWindow {
@@ -19,7 +18,6 @@ public:
 
 private slots:
     void showMediaManager();
-    //void showSearchMedia();
     void showLoanManager();
 
 private:

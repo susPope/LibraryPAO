@@ -2,6 +2,7 @@
 #define LIBRO_H
 
 #include "media.h"
+
 #include <QJsonObject>
 
 class Libro : public Media {
@@ -21,11 +22,12 @@ public:
 
     // Implementazione metodi polimorfi
     QString generaId(int count) const override;
-    QString mostraDettagli() const override;
     QDate calcolaPrestito() const override;
     QJsonObject toJson() const override;
-
     static Libro fromJson(const QJsonObject& obj);
+    QString getTipoIcona() const override;
+    QString getDettagliString() const override;
+    QString getIconaPath(bool darkTheme) const override;
 
     // GETTER
     QString getAutore() const { return autore; }

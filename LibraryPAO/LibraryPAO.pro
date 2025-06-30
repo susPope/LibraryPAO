@@ -23,6 +23,7 @@ SOURCES += \
 
 # Headers - solo percorsi esistenti
 HEADERS += \
+    GUI/themeutils.h \
     Project/media.h \
     Project/articolo.h \
     Project/film.h \

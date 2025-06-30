@@ -2,6 +2,7 @@
 #define ARTICOLO_H
 
 #include "media.h"
+
 #include <QJsonObject>
 
 class Articolo : public Media {
@@ -12,7 +13,6 @@ private:
     int pagine;
 
 public:
-    //Film(const QString& regista, int durata, const QStringList& cast);
     Articolo();
     Articolo(const QString& titolo, const QString& genere, int anno,
              const QString& autore, const QString& rivista, int volume, int pagine);
@@ -20,11 +20,12 @@ public:
 
     // Implementazione metodi polimorfi
     QString generaId(int count) const override;
-    QString mostraDettagli() const override;
     QDate calcolaPrestito() const override;
     QJsonObject toJson() const override;
-
     static Articolo fromJson(const QJsonObject& obj);
+    QString getTipoIcona() const override;
+    QString getDettagliString() const override;
+    QString getIconaPath(bool darkTheme) const override;
 
 
     // GETTER

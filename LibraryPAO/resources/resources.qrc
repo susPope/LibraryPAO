@@ -1,8 +1,11 @@
 <RCC>
     <qresource prefix="/resources">
-        <file>icons/articolo.png</file>
-        <file>icons/film.png</file>
-        <file>icons/libro.png</file>
         <file>icons/logo.png</file>
+        <file>icons/dark/articolo.png</file>
+        <file>icons/dark/film.png</file>
+        <file>icons/dark/libro.png</file>
+        <file>icons/light/articolo.png</file>
+        <file>icons/light/film.png</file>
+        <file>icons/light/libro.png</file>
     </qresource>
 </RCC>

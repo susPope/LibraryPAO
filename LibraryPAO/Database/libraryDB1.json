@@ -1,0 +1,100 @@
+{
+    "articoli": [
+        {
+            "anno": 2023,
+            "autore": "Giovanni Rossi",
+            "disponibile": true,
+            "genere": "Informatica",
+            "id": "ART-PROTEZIONEDEISISTEMIIOT-GIOVANNIROSSI-0",
+            "nprestiti": 0,
+            "pagine": 12,
+            "proxDisp": "2025-06-28",
+            "rivista": "Journal of Cybersecurity",
+            "titolo": "Protezione dei sistemi IoT",
+            "volume": 15
+        }
+    ],
+    "film": [
+        {
+            "anno": 1994,
+            "cast": [
+                "Tim Robbins",
+                "Morgan Freeman",
+                "Bob Gunton"
+            ],
+            "disponibile": false,
+            "durata": 142,
+            "genere": "Drammatico",
+            "id": "FIL-LEALIDELLALIBERTA-FRANKDARAMONT-0",
+            "nprestiti": 12,
+            "proxDisp": "2025-07-05",
+            "regista": "Frank Darabont",
+            "tipo": "Libro",
+            "titolo": "Le ali della libertà"
+        },
+        {
+            "anno": 2010,
+            "cast": [
+                "Leonardo DiCaprio",
+                "Joseph Gordon-Levitt",
+                "Elliot Page"
+            ],
+            "disponibile": true,
+            "durata": 148,
+            "genere": "Sci-Fi",
+            "id": "FIL-INCEPTION-CHRISTOPHERNOLAN-0",
+            "nprestiti": 7,
+            "proxDisp": "2025-06-30",
+            "regista": "Christopher Nolan",
+            "tipo": "Libro",
+            "titolo": "Inception"
+        },
+        {
+            "anno": 1999,
+            "cast": [
+                "Keanu Reeves",
+                "Laurence Fishburne",
+                "Carrie-Anne Moss"
+            ],
+            "disponibile": true,
+            "durata": 136,
+            "genere": "Azione",
+            "id": "FIL-MATRIX-LANAELILLYWACHOWSKI-0",
+            "nprestiti": 5,
+            "proxDisp": "2025-06-30",
+            "regista": "Lana e Lilly Wachowski",
+            "tipo": "Libro",
+            "titolo": "Matrix"
+        }
+    ],
+    "libri": [
+        {
+            "anno": 2005,
+            "autore": "Dan Brown",
+            "disponibile": false,
+            "editore": "Mondadori",
+            "genere": "Thriller",
+            "id": "LIB-ILCODICEDAVINCI-DANBROWN-0",
+            "isbn": "9788804546539",
+            "nprestiti": 15,
+            "pagine": 523,
+            "proxDisp": "2025-07-10",
+            "tipo": "Libro",
+            "titolo": "Il codice Da Vinci"
+        },
+        {
+            "anno": 2005,
+            "autore": "Dan Brown",
+            "disponibile": true,
+            "editore": "Mondadori",
+            "genere": "Thriller",
+            "id": "LIB-ILCODICEDAVINCI-DANBROWN-1",
+            "isbn": "9788804546539",
+            "nprestiti": 0,
+            "pagine": 523,
+            "proxDisp": "2025-06-29",
+            "tipo": "Libro",
+            "titolo": "Il codice Da Vinci"
+        }
+    ]
+}

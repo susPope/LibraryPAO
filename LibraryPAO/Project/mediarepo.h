@@ -1,12 +1,13 @@
 #ifndef MEDIAREPO_H
 #define MEDIAREPO_H
 
+#include "media.h"
+
 #include <QVector>
 #include <QCoreApplication>
 #include <vector>
 #include <memory>
-#include "QJsonArray"
-#include "media.h"
+#include <QJsonArray>
 
 class MediaRepo {
 private:
@@ -33,7 +34,9 @@ public:
     const std::vector<std::unique_ptr<Media>>& getTuttiIMedia() const;
 
     // Controlli per l'inserimento e la modifica
-    bool checkLibro(const QString& isbn);
+    static QString normalizeISBN(const QString& raw);
+    static bool isValidISBN(const QString& isbn);
+    static bool checkLibro(const QString& isbn, QString& isbnPulito);
 
     void svuota();
     int countMedia(Media* media);

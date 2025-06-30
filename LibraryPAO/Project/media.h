@@ -10,25 +10,25 @@ private:
     QString genere;
     int anno;
     QString id;         // Identificatore unico
-    bool disponibile;   //default = true
+    bool disponibile;   // default = true
     int nprestiti;
     QDate proxDisp;     // Data dalla quale sarà possibile prender in prestito nuovamente
 
 public:
     // Costruttori / Distruttori
     Media(const QString &titolo, const QString &genere, int anno,
-          bool disponibile = true, int nprestiti = 0);
+        bool disponibile = true, int nprestiti = 0);
     Media() : titolo(""), genere(""), anno(0), id(""), disponibile(true),
         nprestiti(0), proxDisp(QDate::currentDate()){}
     virtual ~Media() = default; // Distruttore puro -> classe astratta
 
     // Metodi polimorfi (non banali)
-    virtual QString mostraDettagli() const = 0;
     virtual QDate calcolaPrestito() const = 0;
     virtual QString generaId(int count) const = 0;
     virtual QJsonObject toJson() const = 0;
-    // Metodo polimorfo #3: Creazione widget UI
-    //virtual QWidget* createDetailsWidget(QWidget* parent = nullptr) const = 0;
+    virtual QString getTipoIcona() const = 0;
+    virtual QString getDettagliString() const = 0;
+    virtual QString getIconaPath(bool darkTheme) const = 0;
 
     bool isInRitardo() const;
 

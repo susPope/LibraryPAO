@@ -1,14 +1,12 @@
 #include "loanviewwidget.h"
-#include "Project/libro.h"
-#include "Project/film.h"
-#include "Project/articolo.h"
+#include "../themeutils.h"
 
 #include <QPixmap>
 #include <QSizePolicy>
 #include <QVBoxLayout>
+#include <QApplication>
 
 LoanViewWidget::LoanViewWidget(Media* media, QWidget* parent) : QWidget(parent), media(media) {
-
     // Etichette
     titoloLabel = new QLabel(media->getTitolo());
     tipoLabel = new QLabel();
@@ -25,26 +23,8 @@ LoanViewWidget::LoanViewWidget(Media* media, QWidget* parent) : QWidget(parent),
     fontTitolo.setBold(true);
     titoloLabel->setFont(fontTitolo);
 
-    QString tipo;
-    QString dettagli;
-    QString iconaPath;
-
-    if (auto* libro = dynamic_cast<Libro*>(media)) {
-        tipo = "📚 Libro";
-        dettagli = QString("Autore: %1 • ISBN: %2").arg(libro->getAutore(), libro->getIsbn());
-        iconaPath = ":/resources/icons/libro.png";
-    } else if (auto* film = dynamic_cast<Film*>(media)) {
-        tipo = "🎬 Film";
-        dettagli = QString("Regista: %1 • Durata: %2 min").arg(film->getRegista()).arg(film->getDurata());
-        iconaPath = ":/resources/icons/film.png";
-    } else if (auto* articolo = dynamic_cast<Articolo*>(media)) {
-        tipo = "📰 Articolo";
-        dettagli = QString("Autore: %1 • Rivista: %2").arg(articolo->getAutore(), articolo->getRivista());
-        iconaPath = ":/resources/icons/articolo.png";
-    }
-
-    tipoLabel->setText(tipo);
-    dettagliLabel->setText(dettagli);
+    tipoLabel->setText(media->getTipoIcona());
+    dettagliLabel->setText(media->getDettagliString());
 
     // Imposta il colore del titolo in base allo stato
     QString coloreTitolo;
@@ -63,14 +43,10 @@ LoanViewWidget::LoanViewWidget(Media* media, QWidget* parent) : QWidget(parent),
     QString stato = media->getDisponibilita()
                         ? "✅ Disponibile"
                         : QString("❌ Non disponibile • Prossima: %1").arg(media->getProssimaDisponibilita().toString("dd/MM/yyyy"));
-    prestitoLabel->setText(
-        QString("%1 • Prestiti: %2")
-            .arg(stato)
-            .arg(media->getNprestiti())
-        );
+    prestitoLabel->setText(QString("%1 • Prestiti: %2").arg(stato).arg(media->getNprestiti()));
 
     QLabel* iconaLabel = new QLabel(this);
-    QPixmap iconaPixmap(iconaPath);
+    QPixmap iconaPixmap(media->getIconaPath(isDarkTheme()));
     iconaLabel->setPixmap(iconaPixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     iconaLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     iconaLabel->setStyleSheet("border: none;");
@@ -101,23 +77,8 @@ LoanViewWidget::LoanViewWidget(Media* media, QWidget* parent) : QWidget(parent),
 
 void LoanViewWidget::aggiorna() {
     titoloLabel->setText(media->getTitolo());
-
-    QString tipo;
-    QString dettagli;
-
-    if (auto* libro = dynamic_cast<Libro*>(media)) {
-        tipo = "📚 Libro";
-        dettagli = QString("Autore: %1 • ISBN: %2").arg(libro->getAutore(), libro->getIsbn());
-    } else if (auto* film = dynamic_cast<Film*>(media)) {
-        tipo = "🎬 Film";
-        dettagli = QString("Regista: %1 • Durata: %2 min").arg(film->getRegista()).arg(film->getDurata());
-    } else if (auto* articolo = dynamic_cast<Articolo*>(media)) {
-        tipo = "📰 Articolo";
-        dettagli = QString("Autore: %1 • Rivista: %2").arg(articolo->getAutore(), articolo->getRivista());
-    }
-
-    tipoLabel->setText(tipo);
-    dettagliLabel->setText(dettagli);
+    tipoLabel->setText(media->getTipoIcona());
+    dettagliLabel->setText(media->getDettagliString());
 
     // Imposta il colore del titolo in base allo stato
     QString coloreTitolo;
@@ -136,9 +97,5 @@ void LoanViewWidget::aggiorna() {
     QString stato = media->getDisponibilita()
                         ? "✅ Disponibile"
                         : QString("❌ Non disponibile • Prossima: %1").arg(media->getProssimaDisponibilita().toString("dd/MM/yyyy"));
-    prestitoLabel->setText(
-        QString("%1 • Prestiti: %2")
-            .arg(stato)
-            .arg(media->getNprestiti())
-        );
+    prestitoLabel->setText(QString("%1 • Prestiti: %2").arg(stato).arg(media->getNprestiti()));
 }

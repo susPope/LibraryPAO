@@ -1,6 +1,7 @@
 #include "loanmanagerwidget.h"
 #include "GUI/LoanManager/loanviewwidget.h"
 #include "Project/mediarepo.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -34,7 +35,7 @@ LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
     setLayout(mainLayout);
     setWindowTitle("Gestione Prestiti");
 
-    // Dati di esempio (usa MediaRepo o la tua fonte dati reale)
+    // Lista dei media contenuti in memoria
     const auto& tuttiIMedia = MediaRepo::instance().getTuttiIMedia();
 
     for (const auto& ptr : tuttiIMedia) {
@@ -48,7 +49,7 @@ LoanManagerWidget::LoanManagerWidget(QWidget *parent) : QWidget(parent) {
         loanList->addItem(item);
         loanList->setItemWidget(item, widget);
 
-        // Salviamo puntatore media in Qt::UserRole, per riconoscerlo dopo
+        // Salvo puntatore media in Qt::UserRole, per riconoscerlo dopo
         item->setData(Qt::UserRole, QVariant::fromValue(reinterpret_cast<quintptr>(m)));
     }
 
@@ -87,6 +88,7 @@ void LoanManagerWidget::addLoan() {
     }
 }
 
+// Esporta dati del media selezionato
 Media* LoanManagerWidget::getMediaFromItem(QListWidgetItem* item) {
     if (!item) return nullptr;
     quintptr ptrVal = item->data(Qt::UserRole).value<quintptr>();
